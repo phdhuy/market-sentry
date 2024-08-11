@@ -6,6 +6,8 @@ import com.phdhuy.springhexagonaltemplate.domain.ports.inbound.asset.GetPriceHis
 import com.phdhuy.springhexagonaltemplate.domain.ports.inbound.asset.StreamCryptoPriceUseCase;
 import com.phdhuy.springhexagonaltemplate.shared.payload.general.ResponseDataAPI;
 import com.phdhuy.springhexagonaltemplate.shared.utils.PagingUtils;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +50,16 @@ public class AssetController {
 
   @GetMapping("/{assetId}/history")
   public ResponseEntity<ResponseDataAPI> getPriceHistoryAsset(
-      @PathVariable UUID assetId, @RequestParam String interval) {
+      @PathVariable UUID assetId,
+      @Parameter(
+              description =
+                  "Time interval for price history data. Valid values are '1m', '5m', '1h', '1d', etc.",
+              schema =
+                  @Schema(
+                      type = "string",
+                      allowableValues = {"1m", "5m", "15m", "1h", "4h", "1d", "1w", "1mo", "6mo", "1y", "2y"}))
+          @RequestParam
+          String interval) {
     return ResponseEntity.ok(
         ResponseDataAPI.successWithoutMeta(
             getPriceHistoryAssetUseCase.getPriceHistoryAsset(assetId, interval)));
