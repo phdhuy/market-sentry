@@ -3,7 +3,6 @@ package com.phdhuy.springhexagonaltemplate.application.rest.controller.asset;
 import com.phdhuy.springhexagonaltemplate.domain.ports.inbound.asset.GetAllAssetUseCase;
 import com.phdhuy.springhexagonaltemplate.domain.ports.inbound.asset.GetDetailAssetUseCase;
 import com.phdhuy.springhexagonaltemplate.domain.ports.inbound.asset.GetPriceHistoryAssetUseCase;
-import com.phdhuy.springhexagonaltemplate.domain.ports.inbound.asset.StreamCryptoPriceUseCase;
 import com.phdhuy.springhexagonaltemplate.shared.payload.general.ResponseDataAPI;
 import com.phdhuy.springhexagonaltemplate.shared.utils.PagingUtils;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,9 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 
 import java.util.UUID;
 
@@ -23,8 +20,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Tag(name = "Asset APIs")
 public class AssetController {
-
-  private final StreamCryptoPriceUseCase streamCryptoPriceUseCase;
 
   private final GetAllAssetUseCase getAllAssetUseCase;
 
@@ -63,10 +58,5 @@ public class AssetController {
     return ResponseEntity.ok(
         ResponseDataAPI.successWithoutMeta(
             getPriceHistoryAssetUseCase.getPriceHistoryAsset(assetId, interval)));
-  }
-
-  @GetMapping("/prices")
-  public Flux<ServerSentEvent<Object>> streamAssetsPrices() {
-    return streamCryptoPriceUseCase.streamCryptosPrices();
   }
 }
