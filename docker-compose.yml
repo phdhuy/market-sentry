@@ -33,6 +33,13 @@ services:
     volumes:
       - influxdb-data:/var/lib/influxdb2
 
+  selenium:
+    image: selenium/standalone-chrome:latest
+    container_name: selenium-chrome
+    ports:
+      - "4444:4444"
+    shm_size: 2g
+
   backend:
     build:
       context: .
@@ -42,6 +49,7 @@ services:
       - postgres
       - rabbitmq
       - influxdb
+      - selenium
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stock-alert
       SPRING_DATASOURCE_USERNAME: postgres
@@ -54,12 +62,14 @@ services:
       INFLUXDB_TOKEN: bW6eoLcswptcDR1Y8n_-7vyccwdeutBgU7grHtU9Mct8cKCVdv7wqLVLXTdAWQ2iHiW7YNXPp3cl2aheLqf5cw==
       INFLUXDB_ORG: stock-alert
       INFLUXDB_BUCKET: stock-alert
+      SELENIUM_URL: http://selenium:4444/wd/hub
     ports:
       - "8080:8080"
     depends_on:
       - postgres
       - rabbitmq
       - influxdb
+      - selenium
 
 volumes:
   postgres-data:
