@@ -1,8 +1,10 @@
-package com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.projection;
+package com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.dto;
 
-public interface AssetSummary {
+import java.util.UUID;
 
-  String getId();
+public interface AssetSummaryDTO {
+
+  UUID getId();
 
   Long getRank();
 

@@ -20,8 +20,6 @@ public class MessageConstant {
 
   public static final String INVALID_REFRESH_TOKEN = "invalid_refresh_token";
 
-  public static final String REVOKED_TOKEN = "revoked_token";
-
   public static final String EXPIRED_TOKEN = "expired_token";
 
   public static final String OAUTH_TOKEN_NOT_FOUND = "oauth_token_not_found";
@@ -30,7 +28,6 @@ public class MessageConstant {
 
   public static final String EXPIRED_REFRESH_TOKEN = "expired_refresh_token";
 
-  public static final String EXPIRED_CONFIRMATION_TOKEN = "expired_confirmation_token";
   // User
   public static final String USER_NOT_FOUND = "user_not_found";
 

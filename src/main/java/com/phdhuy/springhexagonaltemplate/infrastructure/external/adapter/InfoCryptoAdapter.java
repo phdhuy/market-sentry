@@ -1,10 +1,10 @@
-package com.phdhuy.springhexagonaltemplate.infrastructure.external_api.adapter;
+package com.phdhuy.springhexagonaltemplate.infrastructure.external.adapter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.springhexagonaltemplate.domain.model.Asset;
 import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.asset.CrawlDataCryptoPort;
-import com.phdhuy.springhexagonaltemplate.infrastructure.external_api.constant.ExternalAPIConstant;
+import com.phdhuy.springhexagonaltemplate.infrastructure.external.constant.ExternalAPIConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -19,7 +19,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class CrawlDataCryptoAdapter implements CrawlDataCryptoPort {
+public class InfoCryptoAdapter implements CrawlDataCryptoPort {
 
   private final OkHttpClient httpClient;
 
@@ -29,7 +29,7 @@ public class CrawlDataCryptoAdapter implements CrawlDataCryptoPort {
   public List<Asset> crawlDataCrypto() {
     List<Asset> assetList = new ArrayList<>();
 
-    Request request = new Request.Builder().url(ExternalAPIConstant.GET_ALL_INFO_CRYPTO).build();
+    Request request = new Request.Builder().url(ExternalAPIConstant.INFO_CRYPTO).build();
 
     try {
       Response response = httpClient.newCall(request).execute();

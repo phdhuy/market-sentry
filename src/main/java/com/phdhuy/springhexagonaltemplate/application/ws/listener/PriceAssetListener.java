@@ -14,7 +14,7 @@ public class PriceAssetListener {
     private final PriceWebSocketHandler webSocketHandler;
 
     @RabbitListener(queues = "price.client")
-    public void receiveMessage(String message) throws Exception {
+    public void receiveMessage(String message) {
         webSocketHandler.handleTextMessage(message);
     }
 }

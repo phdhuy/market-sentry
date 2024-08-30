@@ -1,4 +1,4 @@
-package com.phdhuy.springhexagonaltemplate.application.ws.config;
+package com.phdhuy.springhexagonaltemplate.shared.config;
 
 import com.phdhuy.springhexagonaltemplate.application.ws.handler.PriceStockVN30Handler;
 import com.phdhuy.springhexagonaltemplate.application.ws.handler.PriceWebSocketHandler;

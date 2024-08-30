@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.messagebroker.RabbitMQPort;
-import com.phdhuy.springhexagonaltemplate.infrastructure.external_api.constant.ExternalAPIConstant;
+import com.phdhuy.springhexagonaltemplate.infrastructure.external.constant.ExternalAPIConstant;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class GetPriceByExternalService {
       return;
     }
 
-    URI uri = new URI(ExternalAPIConstant.GET_PRICE_CRYPTO);
+    URI uri = new URI(ExternalAPIConstant.PRICE_CRYPTO);
     webSocketClient =
         new WebSocketClient(uri) {
           @Override
