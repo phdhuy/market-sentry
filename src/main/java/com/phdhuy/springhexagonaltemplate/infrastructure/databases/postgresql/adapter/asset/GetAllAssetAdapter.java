@@ -3,7 +3,7 @@ package com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.a
 import com.phdhuy.springhexagonaltemplate.domain.model.Asset;
 import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.asset.GetAllAssetPort;
 import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.asset.GetLatestPriceAssetPort;
-import com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.projection.AssetSummary;
+import com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.dto.AssetSummaryDTO;
 import com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.springhexagonaltemplate.infrastructure.mapper.AssetMapper;
 import com.phdhuy.springhexagonaltemplate.shared.annotation.PersistenceAdapter;
@@ -29,9 +29,9 @@ public class GetAllAssetAdapter implements GetAllAssetPort {
 
   @Override
   public Page<Asset> getAllAsset(Pageable pageable) {
-    Page<AssetSummary> assetSummaries = assetRepository.getAllAssetSummary(pageable);
+    Page<AssetSummaryDTO> assetSummaries = assetRepository.getAllAssetSummary(pageable);
     List<String> symbols =
-        assetSummaries.getContent().stream().map(AssetSummary::getIdentity).toList();
+        assetSummaries.getContent().stream().map(AssetSummaryDTO::getIdentity).toList();
 
     HashMap<String, Double> latestPrices = getLatestPriceAssetPort.getLatestPriceAssets(symbols);
 
@@ -43,8 +43,8 @@ public class GetAllAssetAdapter implements GetAllAssetPort {
     return new PageImpl<>(assets, pageable, assetSummaries.getTotalElements());
   }
 
-  private Asset mapToAsset(AssetSummary assetSummary, HashMap<String, Double> latestPrices) {
-    Double latestPrice = latestPrices.get(assetSummary.getIdentity());
-    return assetMapper.toAssetFromProjection(assetSummary, latestPrice != null ? latestPrice : 0.0);
+  private Asset mapToAsset(AssetSummaryDTO assetSummaryDTO, HashMap<String, Double> latestPrices) {
+    Double latestPrice = latestPrices.get(assetSummaryDTO.getIdentity());
+    return assetMapper.toAssetFromProjection(assetSummaryDTO, latestPrice != null ? latestPrice : 0.0);
   }
 }

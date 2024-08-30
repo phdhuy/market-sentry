@@ -32,7 +32,7 @@ public class ScrapingPriceStockVN30 extends TextWebSocketHandler {
 
   private final PriceStockVN30Handler priceStockVN30Handler;
 
-  @Scheduled(cron = "*/30 * 2-16 * * MON-FRI")
+  @Scheduled(cron = "*/30 * * * * MON-FRI")
   public List<String> getStockPrice() throws Exception {
     List<String> prices = new ArrayList<>();
 

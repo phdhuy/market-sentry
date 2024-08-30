@@ -1,7 +1,7 @@
 package com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.repository;
 
 import com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.entity.AssetEntity;
-import com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.projection.AssetSummary;
+import com.phdhuy.springhexagonaltemplate.infrastructure.databases.postgresql.dto.AssetSummaryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,12 +20,12 @@ public interface AssetRepository extends JpaRepository<AssetEntity, UUID> {
 
   @Query(
       value =
-          "SELECT cast (a.id as varchar) AS id, a.identity as identity, a.symbol as symbol, "
+          "SELECT a.id AS id, a.identity as identity, a.symbol as symbol, "
               + "a.name as name, a.supply as supply, a.max_supply as maxSupply, a.rank as rank, "
               + "a.market_cap_usd as marketCapUsd, a.volume_usd24hr as volumeUsd24Hr, "
               + "a.change_percent24hr as changePercent24Hr, a.vwap24hr as vwap24Hr, "
               + "a.explorer as explorer "
               + "FROM asset a ",
       nativeQuery = true)
-  Page<AssetSummary> getAllAssetSummary(Pageable pageable);
+  Page<AssetSummaryDTO> getAllAssetSummary(Pageable pageable);
 }

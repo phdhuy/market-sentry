@@ -1,4 +1,4 @@
-package com.phdhuy.springhexagonaltemplate.infrastructure.messagebroker.config;
+package com.phdhuy.springhexagonaltemplate.shared.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;

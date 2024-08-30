@@ -21,6 +21,8 @@ public class GetLatestPriceAssetAdapter implements GetLatestPriceAssetPort {
 
   private final InfluxDBClient influxDBClient;
 
+  public static final String VALUE = "_value";
+
   @Override
   public Double getLatestPriceAsset(String symbol) {
     QueryApi queryApi = influxDBClient.getQueryApi();
@@ -38,8 +40,8 @@ public class GetLatestPriceAssetAdapter implements GetLatestPriceAssetPort {
     }
 
     FluxRecord fluxRecord = table.getRecords().get(0);
-    return fluxRecord.getValueByKey("_value") != null
-        ? ((Number) Objects.requireNonNull(fluxRecord.getValueByKey("_value"))).doubleValue()
+    return fluxRecord.getValueByKey(VALUE) != null
+        ? ((Number) Objects.requireNonNull(fluxRecord.getValueByKey(VALUE))).doubleValue()
         : 0.0;
   }
 
@@ -54,7 +56,7 @@ public class GetLatestPriceAssetAdapter implements GetLatestPriceAssetPort {
     for (FluxTable table : tables) {
       for (FluxRecord fluxRecord : table.getRecords()) {
         String symbol = (String) fluxRecord.getValueByKey("symbol");
-        Double price = ((Double) Objects.requireNonNull(fluxRecord.getValueByKey("_value")));
+        Double price = ((Double) Objects.requireNonNull(fluxRecord.getValueByKey(VALUE)));
         latestPrices.put(symbol, price);
       }
     }

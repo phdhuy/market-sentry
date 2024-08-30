@@ -1,4 +1,4 @@
-package com.phdhuy.springhexagonaltemplate.infrastructure.cronjob.config;
+package com.phdhuy.springhexagonaltemplate.shared.config;
 
 import org.jobrunr.jobs.mappers.JobMapper;
 import org.jobrunr.storage.StorageProvider;
