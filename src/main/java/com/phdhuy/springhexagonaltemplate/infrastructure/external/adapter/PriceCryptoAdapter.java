@@ -1,10 +1,11 @@
-package com.phdhuy.springhexagonaltemplate.domain.services.asset;
+package com.phdhuy.springhexagonaltemplate.infrastructure.external.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.messagebroker.RabbitMQPort;
 import com.phdhuy.springhexagonaltemplate.infrastructure.external.constant.ExternalAPIConstant;
+import com.phdhuy.springhexagonaltemplate.shared.handler.PriceWebSocketHandler;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +22,18 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class GetPriceByExternalService {
+public class PriceCryptoAdapter {
 
   private final RabbitMQPort rabbitMQPort;
+
+  private final PriceWebSocketHandler priceWebSocketHandler;
+
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
   private static final int RECONNECT_DELAY = 3;
+
   private volatile boolean isConnected = false;
+
   private WebSocketClient webSocketClient;
 
   @PostConstruct
@@ -61,6 +67,7 @@ public class GetPriceByExternalService {
             try {
               JsonNode node = new ObjectMapper().readTree(message);
               rabbitMQPort.sendMessage(node.toString());
+              priceWebSocketHandler.handleTextMessage(node.toString());
             } catch (JsonProcessingException e) {
               log.error("Error parsing JSON message:", e);
             }

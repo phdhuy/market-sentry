@@ -1,4 +1,4 @@
-package com.phdhuy.springhexagonaltemplate.infrastructure.databases.influxdb.config;
+package com.phdhuy.springhexagonaltemplate.shared.config;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.InfluxDBClientFactory;

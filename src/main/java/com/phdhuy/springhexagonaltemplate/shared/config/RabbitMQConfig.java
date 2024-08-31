@@ -37,17 +37,7 @@ public class RabbitMQConfig implements WebSocketMessageBrokerConfigurer {
   }
 
   @Bean
-  public Queue queue2() {
-    return new Queue("price.client");
-  }
-
-  @Bean
   public Binding binding1(Queue queue1, FanoutExchange fanoutExchange) {
     return BindingBuilder.bind(queue1).to(fanoutExchange);
-  }
-
-  @Bean
-  public Binding binding2(Queue queue2, FanoutExchange fanoutExchange) {
-    return BindingBuilder.bind(queue2).to(fanoutExchange);
   }
 }
