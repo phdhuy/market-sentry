@@ -1,8 +1,8 @@
-package com.phdhuy.springhexagonaltemplate.domain.services.asset;
+package com.phdhuy.springhexagonaltemplate.infrastructure.listener;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.asset.CreatePriceAssetPort;
+import com.phdhuy.springhexagonaltemplate.infrastructure.databases.influxdb.adapter.CreatePriceAssetAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PriceListenerService {
 
-  private final CreatePriceAssetPort createPriceAssetPort;
+  private final CreatePriceAssetAdapter createPriceAssetAdapter;
 
   private final ObjectMapper objectMapper;
 
@@ -28,7 +28,7 @@ public class PriceListenerService {
               entry -> {
                 String cryptoName = entry.getKey();
                 double price = entry.getValue().asDouble();
-                createPriceAssetPort.createPriceAssetPort(cryptoName, cryptoName, price);
+                createPriceAssetAdapter.createPriceAssetPort(cryptoName, cryptoName, price);
               });
 
     } catch (Exception e) {

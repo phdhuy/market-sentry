@@ -3,7 +3,6 @@ package com.phdhuy.springhexagonaltemplate.infrastructure.external.adapter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.springhexagonaltemplate.domain.model.Asset;
-import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.asset.CrawlDataCryptoPort;
 import com.phdhuy.springhexagonaltemplate.infrastructure.external.constant.ExternalAPIConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,35 +18,29 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class InfoCryptoAdapter implements CrawlDataCryptoPort {
+public class InfoCryptoAdapter {
 
   private final OkHttpClient httpClient;
 
   private final ObjectMapper objectMapper;
 
-  @Override
   public List<Asset> crawlDataCrypto() {
     List<Asset> assetList = new ArrayList<>();
-
     Request request = new Request.Builder().url(ExternalAPIConstant.INFO_CRYPTO).build();
-
     try {
       Response response = httpClient.newCall(request).execute();
       if (!response.isSuccessful()) {
         throw new IOException("Unexpected code " + response);
       }
-
       String responseBody = response.body().string();
       JsonNode root = objectMapper.readTree(responseBody);
       JsonNode dataNode = root.path("data");
-
       for (JsonNode cryptoNode : dataNode) {
         assetList.add(this.convertToCrypto(cryptoNode));
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
-
     return assetList;
   }
 

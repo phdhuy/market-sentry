@@ -2,7 +2,6 @@ package com.phdhuy.springhexagonaltemplate.infrastructure.databases.influxdb.ada
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.WritePrecision;
-import com.phdhuy.springhexagonaltemplate.domain.ports.outbound.asset.CreatePriceAssetPort;
 import com.phdhuy.springhexagonaltemplate.infrastructure.databases.influxdb.entity.PriceAssetEntity;
 import com.phdhuy.springhexagonaltemplate.shared.annotation.PersistenceAdapter;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +10,10 @@ import java.time.Instant;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
-public class CreatePriceAssetAdapter implements CreatePriceAssetPort {
+public class CreatePriceAssetAdapter {
 
   private final InfluxDBClient influxDBClient;
 
-  @Override
   public void createPriceAssetPort(String name, String symbol, double price) {
     PriceAssetEntity priceAssetEntity = new PriceAssetEntity();
 
