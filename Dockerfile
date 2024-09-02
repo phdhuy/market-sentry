@@ -3,14 +3,15 @@ FROM maven:3.9.3-amazoncorretto-17 AS build
 WORKDIR /usr/src/app
 
 COPY pom.xml .
+COPY application/pom.xml ./application/
+COPY domain/pom.xml ./domain/
+COPY shared/pom.xml ./shared/
+COPY web/pom.xml ./web/
+COPY infrastructure/pom.xml ./infrastructure/
 
-COPY application ./application
-COPY domain ./domain
-COPY shared ./shared
-COPY web ./web
-COPY infrastructure ./infrastructure
+RUN mvn dependency:go-offline -B
 
-RUN mvn dependency:go-offline
+COPY . .
 
 RUN mvn clean package -DskipTests
 

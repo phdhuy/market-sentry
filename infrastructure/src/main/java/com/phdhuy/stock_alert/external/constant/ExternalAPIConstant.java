@@ -9,4 +9,8 @@ public class ExternalAPIConstant {
   public static final String PRICE_CRYPTO = "wss://ws.coincap.io/prices?assets=ALL";
 
   public static final String PRICE_STOCK = "https://banggia.vps.com.vn/chung-khoan/VN30";
+
+  public static final String INFO_STOCK_VN = "https://finance.vietstock.vn/";
+
+  public static final String LANGUAGE = "-.htm?languageid=2";
 }

@@ -2,6 +2,7 @@ package com.phdhuy.stock_alert.external.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phdhuy.stock_alert.databases.influxdb.adapter.CreatePriceAssetAdapter;
 import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
 import java.time.Duration;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
 
   private final PriceWebSocketHandler priceWebSocketHandler;
 
+  private final CreatePriceAssetAdapter createPriceAssetAdapter;
+
   @Scheduled(cron = "*/10 * * * * MON-FRI")
   public void getStockPrice() throws JsonProcessingException {
     webDriver.get(ExternalAPIConstant.PRICE_STOCK);
@@ -47,6 +50,7 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
       map.put(id, price);
       String jsonString = new ObjectMapper().writeValueAsString(map);
       priceWebSocketHandler.handleTextMessage(jsonString);
+      createPriceAssetAdapter.createPriceAssetPort(id, id, Double.parseDouble(price));
     }
   }
 }
