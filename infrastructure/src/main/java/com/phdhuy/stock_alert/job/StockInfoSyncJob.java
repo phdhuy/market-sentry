@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,7 +24,6 @@ public class StockInfoSyncJob {
 
   private final StockRepository stockRepository;
 
-  @Scheduled(cron = "* * * * * *")
   public void scheduledStockInfoProcessing() {
     webDriver.get(ExternalAPIConstant.PRICE_STOCK);
 
