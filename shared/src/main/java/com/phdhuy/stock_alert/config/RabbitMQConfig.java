@@ -33,7 +33,7 @@ public class RabbitMQConfig implements WebSocketMessageBrokerConfigurer {
 
   @Bean
   public Queue queue1() {
-    return new Queue("price.database");
+    return new Queue("price");
   }
 
   @Bean

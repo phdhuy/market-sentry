@@ -3,6 +3,7 @@ package com.phdhuy.stock_alert.listener;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.databases.influxdb.adapter.CreatePriceAssetAdapter;
+import com.phdhuy.stock_alert.handler.PriceWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -15,22 +16,23 @@ public class PriceListenerService {
 
   private final CreatePriceAssetAdapter createPriceAssetAdapter;
 
+  private final PriceWebSocketHandler priceWebSocketHandler;
+
   private final ObjectMapper objectMapper;
 
-  @RabbitListener(queues = "price.database")
+  @RabbitListener(queues = "price")
   public void receiveMessage(String message) {
     try {
       JsonNode rootNode = objectMapper.readTree(message);
-
+      priceWebSocketHandler.handleTextMessage(rootNode.toString());
       rootNode
           .fields()
           .forEachRemaining(
               entry -> {
-                String cryptoName = entry.getKey();
-                double price = entry.getValue().asDouble();
-                createPriceAssetAdapter.createPriceAssetPort(cryptoName, cryptoName, price);
+                String assetSymbol = entry.getKey();
+                double assetPrice = entry.getValue().asDouble();
+                createPriceAssetAdapter.createPriceAssetPort(assetSymbol, assetSymbol, assetPrice);
               });
-
     } catch (Exception e) {
       log.error("Error processing message:", e);
     }

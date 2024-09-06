@@ -4,20 +4,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
-import com.phdhuy.stock_alert.handler.PriceWebSocketHandler;
 import com.phdhuy.stock_alert.ports.outbound.messagebroker.RabbitMQPort;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.handshake.ServerHandshake;
-import org.springframework.stereotype.Service;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.handshake.ServerHandshake;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +23,6 @@ import java.util.concurrent.TimeUnit;
 public class PriceCryptoAdapter {
 
   private final RabbitMQPort rabbitMQPort;
-
-  private final PriceWebSocketHandler priceWebSocketHandler;
 
   private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -67,7 +63,6 @@ public class PriceCryptoAdapter {
             try {
               JsonNode node = new ObjectMapper().readTree(message);
               rabbitMQPort.sendMessage(node.toString());
-              priceWebSocketHandler.handleTextMessage(node.toString());
             } catch (JsonProcessingException e) {
               log.error("Error parsing JSON message:", e);
             }
