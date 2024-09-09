@@ -2,7 +2,6 @@ package com.phdhuy.stock_alert.external.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.databases.influxdb.adapter.CreatePriceAssetAdapter;
 import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
 import com.phdhuy.stock_alert.ports.outbound.messagebroker.RabbitMQPort;
 import java.time.Duration;
