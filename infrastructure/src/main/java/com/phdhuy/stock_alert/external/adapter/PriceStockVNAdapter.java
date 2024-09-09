@@ -36,12 +36,6 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
     webDriver.get(ExternalAPIConstant.PRICE_STOCK);
 
     WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
-//    WebElement tradingStatus =
-//        wait.until(
-//            ExpectedConditions.visibilityOfElementLocated(
-//                By.xpath(
-//                    "//div[contains(@class, 'chart-footer-vn30')]//div[contains(text(), 'Đóng cửa')]")));
-//    log.info(tradingStatus.getText());
     while (true) {
       List<Map<String, String>> priceList = new ArrayList<>();
       List<WebElement> priceElements =
