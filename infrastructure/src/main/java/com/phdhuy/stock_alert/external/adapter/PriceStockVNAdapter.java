@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
 import com.phdhuy.stock_alert.ports.outbound.messagebroker.RabbitMQPort;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
 
     WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
     while (true) {
-      List<Map<String, String>> priceList = new ArrayList<>();
+      Map<String, String> priceMap = new HashMap<>();
       List<WebElement> priceElements =
           wait.until(
               ExpectedConditions.presenceOfAllElementsLocatedBy(
@@ -45,12 +44,10 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
       for (WebElement stock : priceElements) {
         String id = stock.getAttribute("id").substring(0, 3);
         String price = stock.getText();
-        Map<String, String> map = new HashMap<>();
-        map.put(id, price);
-        priceList.add(map);
+        priceMap.put(id, price);
       }
       ObjectMapper objectMapper = new ObjectMapper();
-      String jsonString = objectMapper.writeValueAsString(priceList);
+      String jsonString = objectMapper.writeValueAsString(priceMap);
       rabbitMQPort.sendMessage(jsonString);
     }
   }
