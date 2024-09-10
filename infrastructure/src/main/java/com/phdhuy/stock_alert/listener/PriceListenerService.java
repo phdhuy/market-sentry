@@ -31,7 +31,7 @@ public class PriceListenerService {
               entry -> {
                 String assetSymbol = entry.getKey();
                 double assetPrice = entry.getValue().asDouble();
-                createPriceAssetAdapter.createPriceAssetPort(assetSymbol, assetSymbol, assetPrice);
+                createPriceAssetAdapter.createPriceAsset(assetSymbol, assetSymbol, assetPrice);
               });
     } catch (Exception e) {
       log.error("Error processing message:", e);

@@ -1,5 +1,6 @@
 package com.phdhuy.stock_alert.databases.postgresql.entity;
 
+import com.phdhuy.stock_alert.databases.postgresql.entity.enums.AssetType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,4 +38,14 @@ public class AssetEntity extends BaseEntity {
   @Column private Double vwap24Hr;
 
   @Column private String explorer;
+
+  @Column private String floor;
+
+  @Column private String nameVn;
+
+  @Column
+  @Enumerated(EnumType.STRING)
+  private AssetType assetType;
+
+  @Column private String logo;
 }
