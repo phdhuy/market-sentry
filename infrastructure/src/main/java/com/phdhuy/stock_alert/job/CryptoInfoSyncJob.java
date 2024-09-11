@@ -20,7 +20,7 @@ public class CryptoInfoSyncJob {
 
   private final ExistsCryptoPort existsCryptoPort;
 
-  @Scheduled(cron = "0 */1 * * * *")
+  @Scheduled(cron = "*/60 * * * * *")
   public void crawlDataCryptoAndSaveToDB() {
     List<Asset> assetList = infoCryptoAdapter.crawlDataCrypto();
     for (Asset asset : assetList) {

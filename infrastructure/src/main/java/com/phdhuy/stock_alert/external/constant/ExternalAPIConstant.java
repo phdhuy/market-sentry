@@ -10,7 +10,8 @@ public class ExternalAPIConstant {
 
   public static final String PRICE_STOCK = "https://banggia.vps.com.vn/chung-khoan/VN30";
 
-  public static final String INFO_STOCK_VN = "https://finance.vietstock.vn/";
+  public static final String IMAGE_STOCK_VN = "https://finance.vietstock.vn/image/";
 
-  public static final String LANGUAGE = "-.htm?languageid=2";
+  public static final String INFO_STOCK_VN =
+      "https://api-finfo.vndirect.com.vn/v4/stocks?q=type:STOCK~status:LISTED&fields=code,companyName,companyNameEng,shortName,floor,industryName,status&size=2000";
 }

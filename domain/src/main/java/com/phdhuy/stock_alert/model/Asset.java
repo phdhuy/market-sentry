@@ -38,5 +38,13 @@ public class Asset {
 
   private Double currentPriceUsd;
 
+  private String floor;
+
+  private String nameVn;
+
+  private String assetType;
+
+  private String logo;
+
   private List<PriceAsset> priceAssets;
 }

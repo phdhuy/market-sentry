@@ -14,7 +14,7 @@ public class CreatePriceAssetAdapter {
 
   private final InfluxDBClient influxDBClient;
 
-  public void createPriceAssetPort(String name, String symbol, double price) {
+  public void createPriceAsset(String name, String symbol, double price) {
     PriceAssetEntity priceAssetEntity = new PriceAssetEntity();
 
     priceAssetEntity.setName(name);

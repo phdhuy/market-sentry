@@ -17,8 +17,8 @@ public class GetAllAssetService implements GetAllAssetUseCase {
   private final GetAllAssetPort getAllAssetPort;
 
   @Override
-  public ResponseDataAPI getAllAsset(Pageable pageable) {
-    Page<Asset> assets = getAllAssetPort.getAllAsset(pageable);
+  public ResponseDataAPI getAllAsset(Pageable pageable, String type, String query) {
+    Page<Asset> assets = getAllAssetPort.getAllAsset(pageable, type, query);
 
     PageInfo pageInfo =
         new PageInfo(

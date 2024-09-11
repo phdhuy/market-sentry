@@ -32,9 +32,11 @@ public class AssetController {
       @RequestParam(name = "sort", defaultValue = "rank") String sortBy,
       @RequestParam(name = "order", defaultValue = "asc") String order,
       @RequestParam(name = "page", defaultValue = "1") int page,
-      @RequestParam(name = "paging", defaultValue = "50") int paging) {
+      @RequestParam(name = "paging", defaultValue = "30") int paging,
+      @RequestParam(name = "type", defaultValue = "STOCK") String type,
+      @RequestParam(name = "q", defaultValue = "ALL") String q) {
     Pageable pageable = PagingUtils.makePageRequestWithSnakeCase(sortBy, order, page, paging);
-    return ResponseEntity.ok(getAllAssetUseCase.getAllAsset(pageable));
+    return ResponseEntity.ok(getAllAssetUseCase.getAllAsset(pageable, type, q));
   }
 
   @GetMapping("/{assetId}")
@@ -52,7 +54,9 @@ public class AssetController {
               schema =
                   @Schema(
                       type = "string",
-                      allowableValues = {"1m", "5m", "15m", "1h", "4h", "1d", "1w", "1mo", "6mo", "1y", "2y"}))
+                      allowableValues = {
+                        "1m", "5m", "15m", "1h", "4h", "1d", "1w", "1mo", "6mo", "1y", "2y"
+                      }))
           @RequestParam
           String interval) {
     return ResponseEntity.ok(
