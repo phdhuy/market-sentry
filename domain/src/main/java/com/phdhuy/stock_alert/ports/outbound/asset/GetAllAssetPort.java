@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 
 public interface GetAllAssetPort {
 
-  Page<Asset> getAllAsset(Pageable pageable);
+  Page<Asset> getAllAsset(Pageable pageable, String type, String query);
 }
