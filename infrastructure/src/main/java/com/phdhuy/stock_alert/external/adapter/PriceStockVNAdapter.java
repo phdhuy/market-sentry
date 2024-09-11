@@ -10,9 +10,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -35,20 +33,34 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
 
     WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
     while (true) {
-      Map<String, String> priceMap = new HashMap<>();
-      List<WebElement> priceElements =
-          wait.until(
-              ExpectedConditions.presenceOfAllElementsLocatedBy(
-                  By.xpath("//*[contains(@id, '_lastPrice_value')]")));
+      if (!isMarketClosed(wait)) {
+        Map<String, String> priceMap = new HashMap<>();
+        List<WebElement> priceElements =
+            wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(
+                    By.xpath("//*[contains(@id, '_lastPrice_value')]")));
 
-      for (WebElement stock : priceElements) {
-        String id = stock.getAttribute("id").substring(0, 3);
-        String price = stock.getText();
-        priceMap.put(id, price);
+        for (WebElement stock : priceElements) {
+          String id = stock.getAttribute("id").substring(0, 3);
+          String price = stock.getText();
+          priceMap.put(id, price);
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonString = objectMapper.writeValueAsString(priceMap);
+        rabbitMQPort.sendMessage(jsonString);
       }
-      ObjectMapper objectMapper = new ObjectMapper();
-      String jsonString = objectMapper.writeValueAsString(priceMap);
-      rabbitMQPort.sendMessage(jsonString);
     }
+  }
+
+  public boolean isMarketClosed(WebDriverWait wait) {
+    wait.until(ExpectedConditions.presenceOfElementLocated(By.className("chart-footer-vn30")));
+    List<WebElement> footerDivs =
+        webDriver.findElements(By.xpath("//div[contains(@class, 'chart-footer-vn30')]//div"));
+    for (WebElement div : footerDivs) {
+      if (div.getText().contains("Đóng cửa")) {
+        return true;
+      }
+    }
+    return false;
   }
 }

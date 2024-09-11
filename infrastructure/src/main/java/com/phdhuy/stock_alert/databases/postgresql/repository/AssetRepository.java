@@ -1,6 +1,8 @@
 package com.phdhuy.stock_alert.databases.postgresql.repository;
 
 import com.phdhuy.stock_alert.databases.postgresql.entity.AssetEntity;
+
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
@@ -20,7 +22,7 @@ public interface AssetRepository extends JpaRepository<AssetEntity, UUID> {
       value =
           "SELECT * "
                   + "FROM asset a "
-                  + "WHERE a.asset_type = :assetType and (:query = 'ALL' or a.symbol like %:query%) ",
+                  + "WHERE a.asset_type = :assetType and (:isAll = true or a.symbol IN (:query)) ",
       nativeQuery = true)
-  Page<AssetEntity> getAllAssetSummary(Pageable pageable, String assetType, String query);
+  Page<AssetEntity> getAllAssetSummary(Pageable pageable, String assetType, List<String> query, boolean isAll);
 }

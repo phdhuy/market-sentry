@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -34,7 +35,7 @@ public class AssetController {
       @RequestParam(name = "page", defaultValue = "1") int page,
       @RequestParam(name = "paging", defaultValue = "30") int paging,
       @RequestParam(name = "type", defaultValue = "STOCK") String type,
-      @RequestParam(name = "q", defaultValue = "ALL") String q) {
+      @RequestParam(name = "q", defaultValue = "") List<String> q) {
     Pageable pageable = PagingUtils.makePageRequestWithSnakeCase(sortBy, order, page, paging);
     return ResponseEntity.ok(getAllAssetUseCase.getAllAsset(pageable, type, q));
   }

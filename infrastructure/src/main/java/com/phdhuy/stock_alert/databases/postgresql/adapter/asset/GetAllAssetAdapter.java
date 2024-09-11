@@ -27,9 +27,10 @@ public class GetAllAssetAdapter implements GetAllAssetPort {
   private final AssetMapper assetMapper;
 
   @Override
-  public Page<Asset> getAllAsset(Pageable pageable, String type, String query) {
+  public Page<Asset> getAllAsset(Pageable pageable, String type, List<String> query) {
+    boolean isAll = query.isEmpty();
     Page<AssetEntity> assetSummaries =
-        assetRepository.getAllAssetSummary(pageable, type, query);
+        assetRepository.getAllAssetSummary(pageable, type, query, isAll);
     List<String> symbols =
         assetSummaries.getContent().stream().map(AssetEntity::getIdentity).toList();
 

@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 @UseCase
 @RequiredArgsConstructor
 public class GetAllAssetService implements GetAllAssetUseCase {
@@ -17,7 +19,7 @@ public class GetAllAssetService implements GetAllAssetUseCase {
   private final GetAllAssetPort getAllAssetPort;
 
   @Override
-  public ResponseDataAPI getAllAsset(Pageable pageable, String type, String query) {
+  public ResponseDataAPI getAllAsset(Pageable pageable, String type, List<String> query) {
     Page<Asset> assets = getAllAssetPort.getAllAsset(pageable, type, query);
 
     PageInfo pageInfo =
