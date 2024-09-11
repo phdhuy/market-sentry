@@ -23,7 +23,7 @@ public class StockInfoSyncJob {
 
   private final ExistsCryptoPort existsCryptoPort;
 
-  @Scheduled(cron = "*/10 * * * * *")
+  @Scheduled(cron = "0 0 17 * * *")
   public void crawlDataStockAndSaveToDB() throws IOException {
     List<Asset> assetList = infoStockAdapter.crawlDataStock();
     for (Asset asset : assetList) {
