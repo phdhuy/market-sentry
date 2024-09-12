@@ -3,6 +3,7 @@ package com.phdhuy.stock_alert.external.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
+import com.phdhuy.stock_alert.external.constant.ScrapingConstant;
 import com.phdhuy.stock_alert.ports.outbound.messagebroker.RabbitMQPort;
 import java.time.Duration;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
         List<WebElement> priceElements =
             wait.until(
                 ExpectedConditions.presenceOfAllElementsLocatedBy(
-                    By.xpath("//*[contains(@id, '_lastPrice_value')]")));
+                    By.xpath(ScrapingConstant.LAST_PRICE_VALUE_XPATH)));
 
         for (WebElement stock : priceElements) {
           String id = stock.getAttribute("id").substring(0, 3);
@@ -53,11 +54,14 @@ public class PriceStockVNAdapter extends TextWebSocketHandler {
   }
 
   public boolean isMarketClosed(WebDriverWait wait) {
-    wait.until(ExpectedConditions.presenceOfElementLocated(By.className("chart-footer-vn30")));
+    wait.until(
+        ExpectedConditions.presenceOfElementLocated(
+            By.className(ScrapingConstant.MARKET_STATUS_CLASS_NAME)));
     List<WebElement> footerDivs =
-        webDriver.findElements(By.xpath("//div[contains(@class, 'chart-footer-vn30')]//div"));
+        webDriver.findElements(By.xpath(ScrapingConstant.MARKET_STATUS_XPATH));
     for (WebElement div : footerDivs) {
-      if (div.getText().contains("Đóng cửa")) {
+      if (div.getText().contains(ScrapingConstant.MARKET_STATUS_IS_CLOSED)
+          || div.getText().contains(ScrapingConstant.MARKET_STATUS_IS_BREAK)) {
         return true;
       }
     }
