@@ -3,7 +3,7 @@ package com.phdhuy.stock_alert.external.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
+import com.phdhuy.stock_alert.constant.ExternalAPIConstant;
 import com.phdhuy.stock_alert.ports.outbound.messagebroker.RabbitMQPort;
 import jakarta.annotation.PostConstruct;
 import java.net.URI;
