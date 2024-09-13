@@ -3,7 +3,7 @@ package com.phdhuy.stock_alert.external.adapter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.databases.postgresql.entity.enums.AssetType;
-import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
+import com.phdhuy.stock_alert.constant.ExternalAPIConstant;
 import com.phdhuy.stock_alert.model.Asset;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

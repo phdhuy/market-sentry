@@ -2,8 +2,8 @@ package com.phdhuy.stock_alert.external.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.external.constant.ExternalAPIConstant;
-import com.phdhuy.stock_alert.external.constant.ScrapingConstant;
+import com.phdhuy.stock_alert.constant.ExternalAPIConstant;
+import com.phdhuy.stock_alert.constant.ScrapingConstant;
 import com.phdhuy.stock_alert.ports.outbound.messagebroker.RabbitMQPort;
 import java.time.Duration;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.phdhuy.stock_alert.external.constant;
+package com.phdhuy.stock_alert.constant;
 
 public class ExternalAPIConstant {
 
