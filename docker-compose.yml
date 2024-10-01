@@ -64,7 +64,7 @@ services:
       INFLUXDB_BUCKET: stock-alert
       SELENIUM_URL: http://selenium:4444/wd/hub
     ports:
-      - "8080:8080"
+      - "8081:8081"
     depends_on:
       - postgres
       - rabbitmq
