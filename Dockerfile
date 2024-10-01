@@ -21,6 +21,6 @@ WORKDIR /usr/app
 
 COPY --from=build /usr/src/app/web/target/web-0.0.1-SNAPSHOT.jar /usr/app
 
-EXPOSE 8080
+EXPOSE 8081
 
 CMD ["java", "-jar", "web-0.0.1-SNAPSHOT.jar"]
