@@ -64,4 +64,9 @@ public class AssetController {
         ResponseDataAPI.successWithoutMeta(
             getPriceHistoryAssetUseCase.getPriceHistoryAsset(assetId, interval)));
   }
+
+  @GetMapping("/hello")
+    public ResponseEntity<ResponseDataAPI> helloWorld() {
+      return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta("hello world"));
+  }
 }
