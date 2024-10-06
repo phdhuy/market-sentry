@@ -45,6 +45,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: spring-app-stock-alert
+    restart: always
     links:
       - postgres
       - rabbitmq
