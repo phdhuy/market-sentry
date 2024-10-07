@@ -2,16 +2,22 @@ pipeline {
     agent any
 
     stages {
-         stage('Clone Repository') {
-               steps {
-                    script {
-                        withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN')]) {
-
-                                                sh 'git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
-                                            }
+        stage('Clone or Pull Repository') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN')]) {
+                        if (fileExists('stock-alert')) {
+                            dir('stock-alert') {
+                                sh 'git pull https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
+                            }
+                        } else {
+                            // If it doesn't exist, clone the repository
+                            sh 'git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
+                        }
                     }
-               }
-         }
+                }
+            }
+        }
 
         stage('Down existing container') {
             steps {
@@ -39,3 +45,4 @@ pipeline {
         }
     }
 }
+
