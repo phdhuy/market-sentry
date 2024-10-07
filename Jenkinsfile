@@ -2,11 +2,16 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/duchuyyyy/stock-alert.git'
-            }
-        }
+        stages {
+              stage('Checkout') {
+                    steps {
+                        script {
+                            git branch: 'main',
+                                url: 'git@github.com:duchuyyyy/stock-alert.git',
+                                credentialsId: 'github-ssh-key'
+                        }
+                    }
+                }
 
         stage('Down existing container') {
             steps {
