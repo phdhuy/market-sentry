@@ -5,9 +5,10 @@ pipeline {
          stage('Clone Repository') {
                steps {
                     script {
-                        withCredentials([usernamePassword(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
-                        sh 'git clone https://$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
-                        }
+                        withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN')]) {
+
+                                                sh 'git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
+                                            }
                     }
                }
          }
