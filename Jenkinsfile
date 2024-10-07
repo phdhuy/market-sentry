@@ -6,7 +6,11 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN')]) {
-                        git url: 'https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
+                        if (fileExists('stock-alert')) {
+                            sh 'git pull https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
+                        } else {
+                            sh 'git clone https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
+                        }
                     }
                 }
             }
