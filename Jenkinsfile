@@ -4,7 +4,11 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/duchuyyyy/stock-alert.git'
+                script {
+                    git branch: 'main',
+                        url: 'git@github.com:duchuyyyy/stock-alert.git',
+                        credentialsId: 'github-ssh-key'
+                }
             }
         }
 
@@ -34,3 +38,4 @@ pipeline {
         }
     }
 }
+
