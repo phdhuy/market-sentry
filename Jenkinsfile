@@ -1,15 +1,13 @@
 pipeline {
     agent any
 
-    environment {
-            GITHUB_TOKEN = credentials('github-token')
-    }
-
     stages {
          stage('Clone Repository') {
                steps {
                     script {
-                       sh "git clone https://$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git"
+                        withCredentials([string(credentialsId: 'github-token', variable: 'GITHUB_TOKEN')]) {
+                        sh 'git clone https://$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
+                        }
                     }
                }
          }
