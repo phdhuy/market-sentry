@@ -5,7 +5,7 @@ pipeline {
         stage('Clone or Pull Repository') {
             steps {
                 script {
-                    withCredentials([usernamePassword(credentialsId: 'github-credentials', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN')]) {
+                    withCredentials([usernamePassword(credentialsId: 'github-token', usernameVariable: 'GITHUB_USERNAME', passwordVariable: 'GITHUB_TOKEN')]) {
                         if (fileExists('stock-alert')) {
                             dir('stock-alert') {
                                 sh 'git pull https://$GITHUB_USERNAME:$GITHUB_TOKEN@github.com/duchuyyyy/stock-alert.git'
