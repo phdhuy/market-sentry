@@ -38,11 +38,7 @@ services:
     container_name: selenium-chrome
     ports:
       - "4444:4444"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.8'
-          memory: 256M
+    shm_size: 256m
 
   backend:
     build:

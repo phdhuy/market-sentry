@@ -22,7 +22,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class PriceStockVNAdapter extends TextWebSocketHandler {
+public class PriceStockAdapter extends TextWebSocketHandler {
 
   private final WebDriver webDriver;
 
