@@ -1,6 +1,6 @@
 package com.phdhuy.stock_alert.application.controller.auth;
 
-import com.phdhuy.stock_alert.domain.auth.inbound.CreateTokenUseCase;
+import com.phdhuy.stock_alert.domain.auth.ports.inbound.CreateTokenUseCase;
 import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.BadRequestException;

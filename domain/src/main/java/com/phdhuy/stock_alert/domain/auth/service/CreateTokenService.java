@@ -1,9 +1,9 @@
 package com.phdhuy.stock_alert.domain.auth.service;
 
 import com.phdhuy.stock_alert.domain.auth.model.Token;
-import com.phdhuy.stock_alert.domain.auth.outbound.TokenUtilsPort;
+import com.phdhuy.stock_alert.domain.auth.ports.outbound.TokenUtilsPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
-import com.phdhuy.stock_alert.domain.auth.inbound.CreateTokenUseCase;
+import com.phdhuy.stock_alert.domain.auth.ports.inbound.CreateTokenUseCase;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;

@@ -7,7 +7,7 @@ import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import com.phdhuy.stock_alert.infrastructure.mapper.TokenMapper;
 import com.phdhuy.stock_alert.domain.auth.model.Token;
-import com.phdhuy.stock_alert.domain.auth.outbound.TokenUtilsPort;
+import com.phdhuy.stock_alert.domain.auth.ports.outbound.TokenUtilsPort;
 import com.phdhuy.stock_alert.infrastructure.security.config.TokenProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

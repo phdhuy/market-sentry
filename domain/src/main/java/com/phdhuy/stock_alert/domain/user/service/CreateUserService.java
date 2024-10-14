@@ -1,6 +1,6 @@
 package com.phdhuy.stock_alert.domain.user.service;
 
-import com.phdhuy.stock_alert.domain.auth.outbound.PasswordEncodePort;
+import com.phdhuy.stock_alert.domain.auth.ports.outbound.PasswordEncodePort;
 import com.phdhuy.stock_alert.domain.user.model.User;
 import com.phdhuy.stock_alert.domain.user.ports.outbound.CreateUserPort;
 import com.phdhuy.stock_alert.domain.user.ports.outbound.ExistsUserPort;
