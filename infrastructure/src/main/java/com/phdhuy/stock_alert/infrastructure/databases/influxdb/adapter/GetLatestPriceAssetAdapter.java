@@ -5,7 +5,7 @@ import com.influxdb.client.QueryApi;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
-import com.phdhuy.stock_alert.domain.ports.outbound.asset.GetLatestPriceAssetPort;
+import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetLatestPriceAssetPort;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

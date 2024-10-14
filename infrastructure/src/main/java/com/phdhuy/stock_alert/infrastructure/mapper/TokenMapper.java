@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.mapper;
 
 import com.phdhuy.stock_alert.shared.config.MapStructConfig;
-import com.phdhuy.stock_alert.domain.model.Token;
+import com.phdhuy.stock_alert.domain.auth.model.Token;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

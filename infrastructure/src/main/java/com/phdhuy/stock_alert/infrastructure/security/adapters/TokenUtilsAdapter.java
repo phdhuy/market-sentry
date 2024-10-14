@@ -6,8 +6,8 @@ import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.Use
 import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import com.phdhuy.stock_alert.infrastructure.mapper.TokenMapper;
-import com.phdhuy.stock_alert.domain.model.Token;
-import com.phdhuy.stock_alert.domain.ports.outbound.auth.TokenUtilsPort;
+import com.phdhuy.stock_alert.domain.auth.model.Token;
+import com.phdhuy.stock_alert.domain.auth.outbound.TokenUtilsPort;
 import com.phdhuy.stock_alert.infrastructure.security.config.TokenProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

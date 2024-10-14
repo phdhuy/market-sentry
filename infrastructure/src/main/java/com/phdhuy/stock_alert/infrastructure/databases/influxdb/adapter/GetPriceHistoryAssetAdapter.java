@@ -10,8 +10,8 @@ import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEn
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import com.phdhuy.stock_alert.infrastructure.mapper.PriceAssetMapper;
-import com.phdhuy.stock_alert.domain.model.PriceAsset;
-import com.phdhuy.stock_alert.domain.ports.outbound.asset.GetPriceHistoryAssetPort;
+import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
+import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetPriceHistoryAssetPort;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Timestamp;

@@ -3,7 +3,7 @@ package com.phdhuy.stock_alert.infrastructure.mapper;
 import com.phdhuy.stock_alert.shared.config.MapStructConfig;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.dto.AssetSummaryDTO;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
-import com.phdhuy.stock_alert.domain.model.Asset;
+import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

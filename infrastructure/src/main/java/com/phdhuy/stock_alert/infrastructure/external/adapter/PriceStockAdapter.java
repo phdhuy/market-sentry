@@ -2,13 +2,13 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.infrastructure.constant.ExternalAPIConstant;
-import com.phdhuy.stock_alert.infrastructure.constant.ScrapingConstant;
-import com.phdhuy.stock_alert.domain.ports.outbound.messagebroker.RabbitMQPort;
+import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -30,7 +30,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
 
   @EventListener(ApplicationReadyEvent.class)
   public void getStockPrice() throws JsonProcessingException {
-    webDriver.get(ExternalAPIConstant.PRICE_STOCK);
+    webDriver.get(CommonConstant.PRICE_STOCK);
 
     WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
     while (true) {
@@ -39,7 +39,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         List<WebElement> priceElements =
             wait.until(
                 ExpectedConditions.presenceOfAllElementsLocatedBy(
-                    By.xpath(ScrapingConstant.LAST_PRICE_VALUE_XPATH)));
+                    By.xpath(CommonConstant.LAST_PRICE_VALUE_XPATH)));
 
         for (WebElement stock : priceElements) {
           String id = stock.getAttribute("id").substring(0, 3);
@@ -56,12 +56,12 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   public boolean isMarketClosed(WebDriverWait wait) {
     wait.until(
         ExpectedConditions.presenceOfElementLocated(
-            By.className(ScrapingConstant.MARKET_STATUS_CLASS_NAME)));
+            By.className(CommonConstant.MARKET_STATUS_CLASS_NAME)));
     List<WebElement> footerDivs =
-        webDriver.findElements(By.xpath(ScrapingConstant.MARKET_STATUS_XPATH));
+        webDriver.findElements(By.xpath(CommonConstant.MARKET_STATUS_XPATH));
     for (WebElement div : footerDivs) {
-      if (div.getText().contains(ScrapingConstant.MARKET_STATUS_IS_CLOSED)
-          || div.getText().contains(ScrapingConstant.MARKET_STATUS_IS_BREAK)) {
+      if (div.getText().contains(CommonConstant.MARKET_STATUS_IS_CLOSED)
+          || div.getText().contains(CommonConstant.MARKET_STATUS_IS_BREAK)) {
         return true;
       }
     }

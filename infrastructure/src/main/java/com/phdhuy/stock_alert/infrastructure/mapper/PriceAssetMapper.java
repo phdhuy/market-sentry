@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.mapper;
 
 import com.phdhuy.stock_alert.shared.config.MapStructConfig;
-import com.phdhuy.stock_alert.domain.model.PriceAsset;
+import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -2,7 +2,7 @@ package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset
 
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
-import com.phdhuy.stock_alert.domain.ports.outbound.asset.ExistsCryptoPort;
+import com.phdhuy.stock_alert.domain.asset.ports.outbound.ExistsCryptoPort;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter

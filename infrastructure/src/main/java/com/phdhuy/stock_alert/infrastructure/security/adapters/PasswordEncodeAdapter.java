@@ -1,6 +1,6 @@
 package com.phdhuy.stock_alert.infrastructure.security.adapters;
 
-import com.phdhuy.stock_alert.domain.ports.outbound.auth.PasswordEncodePort;
+import com.phdhuy.stock_alert.domain.auth.outbound.PasswordEncodePort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

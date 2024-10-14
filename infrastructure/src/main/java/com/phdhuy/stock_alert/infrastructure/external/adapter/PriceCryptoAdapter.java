@@ -3,8 +3,8 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.infrastructure.constant.ExternalAPIConstant;
-import com.phdhuy.stock_alert.domain.ports.outbound.messagebroker.RabbitMQPort;
+import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
+import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import jakarta.annotation.PostConstruct;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -46,7 +46,7 @@ public class PriceCryptoAdapter {
       return;
     }
 
-    URI uri = new URI(ExternalAPIConstant.PRICE_CRYPTO);
+    URI uri = new URI(CommonConstant.PRICE_CRYPTO);
     webSocketClient =
         new WebSocketClient(uri) {
           @Override
