@@ -1,10 +1,9 @@
 package com.phdhuy.stock_alert.domain.asset.ports.outbound;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface GetAllAssetPort {
 

@@ -1,11 +1,10 @@
 package com.phdhuy.stock_alert.domain.asset.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
-import lombok.Data;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder

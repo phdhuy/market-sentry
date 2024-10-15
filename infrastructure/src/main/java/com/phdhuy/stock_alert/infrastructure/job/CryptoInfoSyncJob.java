@@ -1,14 +1,13 @@
 package com.phdhuy.stock_alert.infrastructure.job;
 
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset.CreateAssetAdapter;
-import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoCryptoAdapter;
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.ExistsCryptoPort;
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset.CreateAssetAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoCryptoAdapter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

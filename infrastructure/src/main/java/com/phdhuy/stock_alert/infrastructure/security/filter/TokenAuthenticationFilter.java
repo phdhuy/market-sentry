@@ -1,18 +1,20 @@
 package com.phdhuy.stock_alert.infrastructure.security.filter;
 
-import com.phdhuy.stock_alert.shared.common.CommonFunction;
-import com.phdhuy.stock_alert.shared.constant.CommonConstant;
-import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.UserEntity;
-import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
-import com.phdhuy.stock_alert.shared.payload.error.ErrorResponse;
-import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
 import com.phdhuy.stock_alert.infrastructure.security.adapters.TokenUtilsAdapter;
 import com.phdhuy.stock_alert.infrastructure.security.domain.UserPrincipal;
 import com.phdhuy.stock_alert.infrastructure.security.utils.LogUtils;
+import com.phdhuy.stock_alert.shared.common.CommonFunction;
+import com.phdhuy.stock_alert.shared.constant.CommonConstant;
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
+import com.phdhuy.stock_alert.shared.payload.error.ErrorResponse;
+import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,9 +24,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor

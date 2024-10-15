@@ -4,21 +4,20 @@ import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.QueryApi;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
-import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
-import com.phdhuy.stock_alert.shared.constant.MessageConstant;
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
-import com.phdhuy.stock_alert.shared.exception.NotFoundException;
-import com.phdhuy.stock_alert.infrastructure.mapper.PriceAssetMapper;
 import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetPriceHistoryAssetPort;
-import lombok.RequiredArgsConstructor;
-
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
+import com.phdhuy.stock_alert.infrastructure.mapper.PriceAssetMapper;
+import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor

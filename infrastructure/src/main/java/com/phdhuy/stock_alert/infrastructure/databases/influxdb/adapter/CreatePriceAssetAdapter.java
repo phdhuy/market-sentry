@@ -2,11 +2,10 @@ package com.phdhuy.stock_alert.infrastructure.databases.influxdb.adapter;
 
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.WritePrecision;
-import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import com.phdhuy.stock_alert.infrastructure.databases.influxdb.entity.PriceAssetEntity;
-import lombok.RequiredArgsConstructor;
-
+import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import java.time.Instant;
+import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
 @RequiredArgsConstructor

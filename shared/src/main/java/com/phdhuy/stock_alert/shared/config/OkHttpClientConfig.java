@@ -1,11 +1,10 @@
 package com.phdhuy.stock_alert.shared.config;
 
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
-
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSocket

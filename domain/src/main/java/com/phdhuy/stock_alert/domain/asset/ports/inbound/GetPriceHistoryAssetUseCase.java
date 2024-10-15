@@ -1,6 +1,5 @@
 package com.phdhuy.stock_alert.domain.asset.ports.inbound;
 
-
 import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
 
 import java.util.List;

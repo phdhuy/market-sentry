@@ -2,9 +2,8 @@ package com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity;
 
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AssetType;
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.UUID;
+import lombok.*;
 
 @Builder
 @Getter

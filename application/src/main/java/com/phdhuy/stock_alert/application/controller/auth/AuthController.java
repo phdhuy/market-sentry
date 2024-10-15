@@ -70,6 +70,7 @@ public class AuthController {
   public ResponseEntity<ResponseDataAPI> refreshToken(
       @Valid @RequestBody RefreshTokenRequest refreshToken) {
     return ResponseEntity.ok(
-        ResponseDataAPI.successWithoutMeta(createTokenUseCase.refreshToken(refreshToken.getRefreshToken())));
+        ResponseDataAPI.successWithoutMeta(
+            createTokenUseCase.refreshToken(refreshToken.getRefreshToken())));
   }
 }

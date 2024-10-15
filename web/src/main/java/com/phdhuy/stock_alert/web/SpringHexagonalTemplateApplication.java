@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories(basePackages = {"com.phdhuy.stock_alert.*"})
 public class SpringHexagonalTemplateApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringHexagonalTemplateApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(SpringHexagonalTemplateApplication.class, args);
+  }
 }

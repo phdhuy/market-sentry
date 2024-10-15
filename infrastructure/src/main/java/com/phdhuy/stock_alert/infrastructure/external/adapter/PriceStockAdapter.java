@@ -3,12 +3,11 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
+import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;

@@ -50,6 +50,7 @@ public class InfoStockAdapter {
         .assetType(String.valueOf(AssetType.STOCK))
         .build();
   }
+
   private String getSafeText(JsonNode node, String key) {
     JsonNode fieldNode = node.get(key);
     return fieldNode != null ? fieldNode.asText() : "";

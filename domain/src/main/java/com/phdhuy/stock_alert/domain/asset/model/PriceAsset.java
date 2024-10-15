@@ -1,10 +1,9 @@
 package com.phdhuy.stock_alert.domain.asset.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import java.sql.Timestamp;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Timestamp;
 
 @Getter
 @Setter

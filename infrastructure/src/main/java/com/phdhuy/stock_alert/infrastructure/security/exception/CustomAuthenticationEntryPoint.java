@@ -1,17 +1,16 @@
 package com.phdhuy.stock_alert.infrastructure.security.exception;
 
+import com.phdhuy.stock_alert.infrastructure.security.utils.LogUtils;
 import com.phdhuy.stock_alert.shared.common.CommonFunction;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.payload.error.ErrorResponse;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
-import com.phdhuy.stock_alert.infrastructure.security.utils.LogUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.AuthenticationEntryPoint;
-
 import java.io.IOException;
 import java.util.Objects;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

@@ -4,15 +4,14 @@ import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.QueryApi;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
-import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetLatestPriceAssetPort;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
+import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @PersistenceAdapter
 @RequiredArgsConstructor

@@ -1,10 +1,9 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.sql.Timestamp;
 import java.util.UUID;
+import lombok.*;
 
 @Builder
 @Getter

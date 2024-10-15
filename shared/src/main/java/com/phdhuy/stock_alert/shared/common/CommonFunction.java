@@ -2,13 +2,12 @@ package com.phdhuy.stock_alert.shared.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.shared.payload.error.ErrorResponse;
-import lombok.extern.slf4j.Slf4j;
-
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public final class CommonFunction {

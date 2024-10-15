@@ -2,16 +2,15 @@ package com.phdhuy.stock_alert.infrastructure.security.domain;
 
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.UserEntity;
 import com.phdhuy.stock_alert.shared.enums.Role;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
 
 @Getter
 @Setter

@@ -1,7 +1,6 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository;
 
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

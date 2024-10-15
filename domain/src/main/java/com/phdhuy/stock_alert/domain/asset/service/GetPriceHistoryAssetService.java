@@ -4,10 +4,9 @@ import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
 import com.phdhuy.stock_alert.domain.asset.ports.inbound.GetPriceHistoryAssetUseCase;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetPriceHistoryAssetPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.UUID;
+import lombok.RequiredArgsConstructor;
 
 @UseCase
 @RequiredArgsConstructor

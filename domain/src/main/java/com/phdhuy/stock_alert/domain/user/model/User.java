@@ -1,11 +1,10 @@
 package com.phdhuy.stock_alert.domain.user.model;
 
 import com.phdhuy.stock_alert.shared.enums.Role;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.sql.Timestamp;
 import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

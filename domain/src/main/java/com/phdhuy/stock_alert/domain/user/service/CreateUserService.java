@@ -2,13 +2,13 @@ package com.phdhuy.stock_alert.domain.user.service;
 
 import com.phdhuy.stock_alert.domain.auth.ports.outbound.PasswordEncodePort;
 import com.phdhuy.stock_alert.domain.user.model.User;
+import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
 import com.phdhuy.stock_alert.domain.user.ports.outbound.CreateUserPort;
 import com.phdhuy.stock_alert.domain.user.ports.outbound.ExistsUserPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.enums.Role;
 import com.phdhuy.stock_alert.shared.exception.BadRequestException;
-import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

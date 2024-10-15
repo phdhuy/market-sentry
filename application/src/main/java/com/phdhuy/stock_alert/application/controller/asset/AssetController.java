@@ -66,7 +66,7 @@ public class AssetController {
   }
 
   @GetMapping("/hello")
-    public ResponseEntity<ResponseDataAPI> helloWorld() {
-      return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta("hello world"));
+  public ResponseEntity<ResponseDataAPI> helloWorld() {
+    return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta("hello world"));
   }
 }
