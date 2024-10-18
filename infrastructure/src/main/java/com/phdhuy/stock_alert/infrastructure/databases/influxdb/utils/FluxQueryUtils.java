@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class FluxQueryUtils {
 
-  private FluxQueryUtils() {}
-
   public static String getLatestPriceAsset(String symbol) {
     return String.format(
         "from(bucket: \"stock-alert\") "
