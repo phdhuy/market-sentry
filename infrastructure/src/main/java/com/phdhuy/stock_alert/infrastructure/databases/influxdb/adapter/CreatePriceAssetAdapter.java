@@ -15,7 +15,6 @@ public class CreatePriceAssetAdapter {
 
   public void createPriceAsset(String name, String symbol, double price) {
     PriceAssetEntity priceAssetEntity = new PriceAssetEntity();
-
     priceAssetEntity.setName(name);
     priceAssetEntity.setSymbol(symbol);
     priceAssetEntity.setPrice(price);

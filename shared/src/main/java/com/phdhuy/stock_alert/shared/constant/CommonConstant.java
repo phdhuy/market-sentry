@@ -38,4 +38,6 @@ public final class CommonConstant {
   public static final String MARKET_STATUS_IS_CLOSED = "Đóng cửa";
 
   public static final String MARKET_STATUS_IS_BREAK = "Nghỉ trưa";
+
+  public static final String VALUE = "_value";
 }

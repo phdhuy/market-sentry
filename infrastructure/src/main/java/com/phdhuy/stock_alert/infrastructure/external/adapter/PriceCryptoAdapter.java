@@ -99,10 +99,4 @@ public class PriceCryptoAdapter {
         RECONNECT_DELAY,
         TimeUnit.SECONDS);
   }
-
-  public void closeWebSocket() {
-    if (webSocketClient != null) {
-      webSocketClient.close();
-    }
-  }
 }

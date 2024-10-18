@@ -32,7 +32,6 @@ public class InfoStockAdapter {
     String responseBody = response.body().string();
     JsonNode root = objectMapper.readTree(responseBody);
     JsonNode dataNode = root.path("data");
-    log.info("dataNode: {}", dataNode);
     for (JsonNode cryptoNode : dataNode) {
       assetList.add(this.convertToStock(cryptoNode));
     }

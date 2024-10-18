@@ -6,10 +6,12 @@ import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetPriceHistoryAssetPort;
+import com.phdhuy.stock_alert.infrastructure.databases.influxdb.utils.FluxQueryUtils;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.PriceAssetMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
+import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import java.sql.Timestamp;
@@ -37,7 +39,7 @@ public class GetPriceHistoryAssetAdapter implements GetPriceHistoryAssetPort {
             .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
 
     QueryApi queryApi = influxDBClient.getQueryApi();
-    String fluxQuery = buildFluxQuery(assetEntity.getIdentity(), interval);
+    String fluxQuery = FluxQueryUtils.getPriceHistoryAsset(assetEntity.getIdentity(), interval);
 
     List<FluxTable> tables = queryApi.query(fluxQuery);
     List<PriceAsset> priceAssets = new ArrayList<>();
@@ -45,18 +47,11 @@ public class GetPriceHistoryAssetAdapter implements GetPriceHistoryAssetPort {
       for (FluxRecord fluxRecord : table.getRecords()) {
         priceAssets.add(
             priceAssetMapper.toPriceAsset(
-                (Double) fluxRecord.getValueByKey("_value"), Timestamp.from(Objects.requireNonNull(fluxRecord.getTime()))));
+                (Double) fluxRecord.getValueByKey(CommonConstant.VALUE),
+                Timestamp.from(Objects.requireNonNull(fluxRecord.getTime()))));
       }
     }
 
     return priceAssets;
-  }
-
-  private String buildFluxQuery(String symbol, String time) {
-    return String.format(
-        "from(bucket: \"stock-alert\") "
-            + "|> range(start: -%s) "
-            + "|> filter(fn: (r) => r._measurement == \"price_asset\" and r.symbol == \"%s\")",
-        time, symbol);
   }
 }
