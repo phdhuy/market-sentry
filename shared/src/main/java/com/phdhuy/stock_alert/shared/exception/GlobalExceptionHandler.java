@@ -3,6 +3,8 @@ package com.phdhuy.stock_alert.shared.exception;
 import com.phdhuy.stock_alert.shared.common.CommonFunction;
 import com.phdhuy.stock_alert.shared.payload.error.ErrorResponse;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
+import java.util.List;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -10,9 +12,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.List;
-import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

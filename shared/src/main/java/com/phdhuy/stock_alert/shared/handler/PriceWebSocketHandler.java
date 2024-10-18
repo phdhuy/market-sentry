@@ -3,7 +3,6 @@ package com.phdhuy.stock_alert.shared.handler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;

@@ -1,11 +1,11 @@
 package com.phdhuy.stock_alert.application.controller.auth;
 
+import com.phdhuy.stock_alert.domain.auth.ports.inbound.CreateTokenUseCase;
+import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.BadRequestException;
 import com.phdhuy.stock_alert.shared.exception.UnauthorizedException;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
-import com.phdhuy.stock_alert.domain.ports.inbound.auth.CreateTokenUseCase;
-import com.phdhuy.stock_alert.domain.ports.inbound.user.CreateUserUseCase;
 import com.phdhuy.stock_alert.application.request.auth.RefreshTokenRequest;
 import com.phdhuy.stock_alert.application.request.auth.SignInRequest;
 import com.phdhuy.stock_alert.application.request.auth.SignUpRequest;
@@ -70,6 +70,7 @@ public class AuthController {
   public ResponseEntity<ResponseDataAPI> refreshToken(
       @Valid @RequestBody RefreshTokenRequest refreshToken) {
     return ResponseEntity.ok(
-        ResponseDataAPI.successWithoutMeta(createTokenUseCase.refreshToken(refreshToken.getRefreshToken())));
+        ResponseDataAPI.successWithoutMeta(
+            createTokenUseCase.refreshToken(refreshToken.getRefreshToken())));
   }
 }

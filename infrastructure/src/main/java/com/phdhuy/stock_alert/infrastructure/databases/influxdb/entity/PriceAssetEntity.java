@@ -2,10 +2,9 @@ package com.phdhuy.stock_alert.infrastructure.databases.influxdb.entity;
 
 import com.influxdb.annotations.Column;
 import com.influxdb.annotations.Measurement;
+import java.time.Instant;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.time.Instant;
 
 @Getter
 @Setter

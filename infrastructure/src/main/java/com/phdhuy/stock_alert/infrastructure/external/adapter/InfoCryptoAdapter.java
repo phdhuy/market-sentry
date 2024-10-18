@@ -2,19 +2,18 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AssetType;
-import com.phdhuy.stock_alert.infrastructure.constant.ExternalAPIConstant;
-import com.phdhuy.stock_alert.domain.model.Asset;
+import com.phdhuy.stock_alert.shared.constant.CommonConstant;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +26,7 @@ public class InfoCryptoAdapter {
 
   public List<Asset> crawlDataCrypto() {
     List<Asset> assetList = new ArrayList<>();
-    Request request = new Request.Builder().url(ExternalAPIConstant.INFO_CRYPTO).build();
+    Request request = new Request.Builder().url(CommonConstant.INFO_CRYPTO).build();
     try {
       Response response = httpClient.newCall(request).execute();
       if (!response.isSuccessful()) {

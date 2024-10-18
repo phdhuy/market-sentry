@@ -1,24 +1,23 @@
 package com.phdhuy.stock_alert.infrastructure.security.adapters;
 
-import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.domain.auth.model.Token;
+import com.phdhuy.stock_alert.domain.auth.ports.outbound.TokenUtilsPort;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.UserEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.UserRepository;
+import com.phdhuy.stock_alert.infrastructure.mapper.TokenMapper;
+import com.phdhuy.stock_alert.infrastructure.security.config.TokenProperties;
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
-import com.phdhuy.stock_alert.infrastructure.mapper.TokenMapper;
-import com.phdhuy.stock_alert.domain.model.Token;
-import com.phdhuy.stock_alert.domain.ports.outbound.auth.TokenUtilsPort;
-import com.phdhuy.stock_alert.infrastructure.security.config.TokenProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.util.Date;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.Date;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor

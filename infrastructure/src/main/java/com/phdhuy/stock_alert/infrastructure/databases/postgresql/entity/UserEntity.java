@@ -3,10 +3,9 @@ package com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity;
 import com.phdhuy.stock_alert.shared.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.*;
-
 import java.sql.Timestamp;
 import java.util.UUID;
+import lombok.*;
 
 @Builder
 @Getter

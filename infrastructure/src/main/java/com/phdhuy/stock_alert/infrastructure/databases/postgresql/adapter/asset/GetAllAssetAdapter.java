@@ -1,12 +1,12 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset;
 
-import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
+import com.phdhuy.stock_alert.domain.asset.model.Asset;
+import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetAllAssetPort;
+import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetLatestPriceAssetPort;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.AssetMapper;
-import com.phdhuy.stock_alert.domain.model.Asset;
-import com.phdhuy.stock_alert.domain.ports.outbound.asset.GetAllAssetPort;
-import com.phdhuy.stock_alert.domain.ports.outbound.asset.GetLatestPriceAssetPort;
+import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import java.util.HashMap;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

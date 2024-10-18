@@ -3,8 +3,8 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AssetType;
-import com.phdhuy.stock_alert.infrastructure.constant.ExternalAPIConstant;
-import com.phdhuy.stock_alert.domain.model.Asset;
+import com.phdhuy.stock_alert.domain.asset.model.Asset;
+import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
@@ -27,12 +27,11 @@ public class InfoStockAdapter {
 
   public List<Asset> crawlDataStock() throws IOException {
     List<Asset> assetList = new ArrayList<>();
-    Request request = new Request.Builder().url(ExternalAPIConstant.INFO_STOCK_VN).build();
+    Request request = new Request.Builder().url(CommonConstant.INFO_STOCK_VN).build();
     Response response = httpClient.newCall(request).execute();
     String responseBody = response.body().string();
     JsonNode root = objectMapper.readTree(responseBody);
     JsonNode dataNode = root.path("data");
-    log.info("dataNode: {}", dataNode);
     for (JsonNode cryptoNode : dataNode) {
       assetList.add(this.convertToStock(cryptoNode));
     }
@@ -46,10 +45,11 @@ public class InfoStockAdapter {
         .name(getSafeText(stockNode, "companyNameEng"))
         .nameVn(getSafeText(stockNode, "companyName"))
         .floor(getSafeText(stockNode, "floor"))
-        .logo(ExternalAPIConstant.IMAGE_STOCK_VN + getSafeText(stockNode, "code"))
+        .logo(CommonConstant.IMAGE_STOCK_VN + getSafeText(stockNode, "code"))
         .assetType(String.valueOf(AssetType.STOCK))
         .build();
   }
+
   private String getSafeText(JsonNode node, String key) {
     JsonNode fieldNode = node.get(key);
     return fieldNode != null ? fieldNode.asText() : "";

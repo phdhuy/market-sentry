@@ -1,12 +1,12 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset;
 
-import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
-import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AssetType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
+import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
-import com.phdhuy.stock_alert.domain.model.Asset;
 import lombok.RequiredArgsConstructor;
 
 @PersistenceAdapter
