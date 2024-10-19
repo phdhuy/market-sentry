@@ -3,7 +3,10 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
+import com.phdhuy.stock_alert.shared.config.WebDriverConfig;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
+
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -24,13 +27,14 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @RequiredArgsConstructor
 public class PriceStockAdapter extends TextWebSocketHandler {
 
-  private final WebDriver webDriver;
-
   private final RabbitMQPort rabbitMQPort;
 
+  private final WebDriverConfig webDriverConfig;
+
   @Scheduled(fixedRate = 30000)
-  public void getStockPrice() throws JsonProcessingException {
+  public void getStockPrice() throws JsonProcessingException, MalformedURLException {
     if (isWithinMarketHours()) {
+      WebDriver webDriver = webDriverConfig.initializeWebDriver();
       webDriver.get(CommonConstant.PRICE_STOCK);
       WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
@@ -48,6 +52,8 @@ public class PriceStockAdapter extends TextWebSocketHandler {
       ObjectMapper objectMapper = new ObjectMapper();
       String jsonString = objectMapper.writeValueAsString(priceMap);
       rabbitMQPort.sendMessage(jsonString);
+
+      webDriver.quit();
     }
   }
 
