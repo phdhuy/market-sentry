@@ -1,5 +1,5 @@
 influx:
   url: http://influxdb:8086
-  token: DzNiMHuRfCTHV4967DipKC3LdSMt49uNHdd5Z8IJoHkrFSpo5g5Ar360jCyQjR1KzBnhYEDhmxRunCnKefTbWQ==
+  token: VJY7r5B2HM7ShdZYZLKfeh270EElO_GTqOLE4vozIWcLLh9L0OvCmQHBEKFEkqgv6XsG9ebwaDJcq5LGt-Xwsg==
   org: stock-alert
   bucket: stock-alert
