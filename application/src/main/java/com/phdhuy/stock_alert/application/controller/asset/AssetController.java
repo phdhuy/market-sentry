@@ -34,7 +34,7 @@ public class AssetController {
       @RequestParam(name = "order", defaultValue = "asc") String order,
       @RequestParam(name = "page", defaultValue = "1") int page,
       @RequestParam(name = "paging", defaultValue = "30") int paging,
-      @RequestParam(name = "type", defaultValue = "STOCK") String type,
+      @RequestParam(name = "type", defaultValue = "CRYPTO") String type,
       @RequestParam(name = "q", defaultValue = "") List<String> q) {
     Pageable pageable = PagingUtils.makePageRequestWithSnakeCase(sortBy, order, page, paging);
     return ResponseEntity.ok(getAllAssetUseCase.getAllAsset(pageable, type, q));
