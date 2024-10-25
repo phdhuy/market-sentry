@@ -40,8 +40,8 @@ services:
       - "4444:4444"
     shm_size: 256m
     environment:
-      SE_START_VNC: false
-      SE_ENABLE_TRACING: false
+      SE_START_VNC: 0
+      SE_ENABLE_TRACING: 0
 
   backend:
     build:
