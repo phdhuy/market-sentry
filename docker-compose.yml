@@ -33,6 +33,16 @@ services:
     volumes:
       - influxdb-data:/var/lib/influxdb2
 
+  selenium:
+    image: selenium/standalone-firefox:latest
+    container_name: selenium-firefox
+    ports:
+      - "4444:4444"
+    shm_size: 256m
+    environment:
+      SE_START_VNC: false
+      SE_ENABLE_TRACING: false
+
   backend:
     build:
       context: .
@@ -43,6 +53,7 @@ services:
       - postgres
       - rabbitmq
       - influxdb
+      - selenium
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stock-alert
       SPRING_DATASOURCE_USERNAME: postgres
@@ -62,6 +73,7 @@ services:
       - postgres
       - rabbitmq
       - influxdb
+      - selenium
 
 volumes:
   postgres-data:
