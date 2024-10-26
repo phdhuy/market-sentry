@@ -32,11 +32,11 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   @EventListener(ApplicationReadyEvent.class)
   public void getStockPrice()
       throws JsonProcessingException, InterruptedException, MalformedURLException {
-    WebDriver webDriver = webDriverConfig.getWebDriver();
-    webDriver.get(CommonConstant.PRICE_STOCK);
-    WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
     int reinitializeWebDriverIndex = 0;
     while (true) {
+      WebDriver webDriver = webDriverConfig.getWebDriver();
+      webDriver.get(CommonConstant.PRICE_STOCK);
+      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
       Map<String, String> priceMap = new HashMap<>();
       List<WebElement> priceElements =
           wait.until(
@@ -54,22 +54,8 @@ public class PriceStockAdapter extends TextWebSocketHandler {
       reinitializeWebDriverIndex++;
       if (reinitializeWebDriverIndex == 200) {
         webDriverConfig.reinitializeWebDriver();
+        reinitializeWebDriverIndex = 0;
       }
     }
   }
-
-  //  public boolean isMarketClosed(WebDriverWait wait) {
-  //    wait.until(
-  //        ExpectedConditions.presenceOfElementLocated(
-  //            By.className(CommonConstant.MARKET_STATUS_CLASS_NAME)));
-  //    List<WebElement> footerDivs =
-  //        wait.findElements(By.xpath(CommonConstant.MARKET_STATUS_XPATH));
-  //    for (WebElement div : footerDivs) {
-  //      if (div.getText().contains(CommonConstant.MARKET_STATUS_IS_CLOSED)
-  //          || div.getText().contains(CommonConstant.MARKET_STATUS_IS_BREAK)) {
-  //        return true;
-  //      }
-  //    }
-  //    return false;
-  //  }
 }
