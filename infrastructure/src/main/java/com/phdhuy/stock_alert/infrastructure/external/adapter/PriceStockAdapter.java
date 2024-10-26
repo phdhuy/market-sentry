@@ -34,6 +34,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
       throws JsonProcessingException, InterruptedException, MalformedURLException {
     int reinitializeWebDriverIndex = 0;
     while (true) {
+      log.info(Integer.toString(reinitializeWebDriverIndex));
       WebDriver webDriver = webDriverConfig.getWebDriver();
       webDriver.get(CommonConstant.PRICE_STOCK);
       WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
