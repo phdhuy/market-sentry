@@ -42,6 +42,9 @@ services:
     environment:
       SE_START_VNC: 0
       SE_ENABLE_TRACING: 0
+    tmpfs:
+      - /tmp:exec,size=512m
+      - /dev/shm:exec,size=1g
 
   backend:
     build:
