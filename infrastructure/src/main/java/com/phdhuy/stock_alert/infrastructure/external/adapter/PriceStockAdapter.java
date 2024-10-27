@@ -53,7 +53,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
       rabbitMQPort.sendMessage(jsonString);
       Thread.sleep(2000);
       reinitializeWebDriverIndex++;
-      if (reinitializeWebDriverIndex == 200) {
+      if (reinitializeWebDriverIndex == 1000) {
         webDriverConfig.reinitializeWebDriver();
         reinitializeWebDriverIndex = 0;
       }

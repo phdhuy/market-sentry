@@ -24,6 +24,11 @@ public class WebDriverConfig {
       options.addArguments("--disable-application-cache");
       options.addArguments("--disable-dev-shm-usage");
 
+      options.addPreference("browser.cache.disk.enable", false);
+      options.addPreference("browser.cache.memory.enable", false);
+      options.addPreference("browser.cache.offline.enable", false);
+      options.addPreference("network.http.use-cache", false);
+
       driver = new RemoteWebDriver(new URL("http://selenium:4444/wd/hub"), options);
     }
     return driver;
@@ -31,9 +36,10 @@ public class WebDriverConfig {
 
   public void reinitializeWebDriver() throws MalformedURLException, InterruptedException {
     if (driver != null) {
+      driver.manage().deleteAllCookies();
       driver.quit();
       driver = null;
-      Thread.sleep(3000);
+      Thread.sleep(10000);
       getWebDriver();
     }
   }
