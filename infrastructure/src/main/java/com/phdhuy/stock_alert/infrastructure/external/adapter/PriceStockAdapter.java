@@ -32,9 +32,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   @EventListener(ApplicationReadyEvent.class)
   public void getStockPrice()
       throws JsonProcessingException, InterruptedException, MalformedURLException {
-    int reinitializeWebDriverIndex = 0;
     while (true) {
-      log.info(Integer.toString(reinitializeWebDriverIndex));
       WebDriver webDriver = webDriverConfig.getWebDriver();
       webDriver.get(CommonConstant.PRICE_STOCK);
       WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
@@ -51,12 +49,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
       ObjectMapper objectMapper = new ObjectMapper();
       String jsonString = objectMapper.writeValueAsString(priceMap);
       rabbitMQPort.sendMessage(jsonString);
-      Thread.sleep(2000);
-      reinitializeWebDriverIndex++;
-      if (reinitializeWebDriverIndex == 1000) {
-        webDriverConfig.reinitializeWebDriver();
-        reinitializeWebDriverIndex = 0;
-      }
+      Thread.sleep(4000);
     }
   }
 }
