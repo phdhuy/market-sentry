@@ -7,6 +7,7 @@ import com.phdhuy.stock_alert.shared.config.WebDriverConfig;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import java.net.MalformedURLException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,12 +36,17 @@ public class PriceStockAdapter extends TextWebSocketHandler {
     while (true) {
       WebDriver webDriver = webDriverConfig.getWebDriver();
       webDriver.get(CommonConstant.PRICE_STOCK);
-      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
+      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
       Map<String, String> priceMap = new HashMap<>();
-      List<WebElement> priceElements =
-          wait.until(
-              ExpectedConditions.presenceOfAllElementsLocatedBy(
-                  By.xpath(CommonConstant.LAST_PRICE_VALUE_XPATH)));
+      List<WebElement> priceElements = new ArrayList<>();
+      try {
+        priceElements =
+            wait.until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                    By.xpath(CommonConstant.LAST_PRICE_VALUE_XPATH)));
+      } catch (TimeoutException e) {
+        log.error("Element not found within the specified timeout.");
+      }
       for (WebElement stock : priceElements) {
         String id = stock.getAttribute("id").substring(0, 3);
         String price = stock.getText();
