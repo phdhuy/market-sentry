@@ -7,10 +7,8 @@ import com.phdhuy.stock_alert.shared.config.WebDriverConfig;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import java.net.MalformedURLException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -33,9 +31,9 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   @EventListener(ApplicationReadyEvent.class)
   public void getStockPrice()
       throws JsonProcessingException, InterruptedException, MalformedURLException {
+    WebDriver webDriver = webDriverConfig.getWebDriver();
+    webDriver.get(CommonConstant.PRICE_STOCK);
     while (true) {
-      WebDriver webDriver = webDriverConfig.getWebDriver();
-      webDriver.get(CommonConstant.PRICE_STOCK);
       WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
       Map<String, String> priceMap = new HashMap<>();
       List<WebElement> priceElements = new ArrayList<>();
