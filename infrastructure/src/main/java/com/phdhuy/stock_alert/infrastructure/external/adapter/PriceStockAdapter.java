@@ -40,8 +40,6 @@ public class PriceStockAdapter extends TextWebSocketHandler {
     LocalTime marketOpen = LocalTime.of(9, 0);
     LocalTime marketClose = LocalTime.of(16, 0);
     while (true) {
-      LocalTime currentTimeInUTC7 = ZonedDateTime.now(zoneId).toLocalTime();
-      log.info("time {}", currentTimeInUTC7);
       WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
       Map<String, String> priceMap = new HashMap<>();
       List<WebElement> priceElements = new ArrayList<>();
@@ -58,7 +56,9 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         String price = stock.getText();
         priceMap.put(id, price);
       }
+      LocalTime currentTimeInUTC7 = ZonedDateTime.now(zoneId).toLocalTime();
       if (currentTimeInUTC7.isAfter(marketOpen) && currentTimeInUTC7.isBefore(marketClose)) {
+        log.info("time {}", currentTimeInUTC7);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonString = objectMapper.writeValueAsString(priceMap);
         rabbitMQPort.sendMessage(jsonString);
