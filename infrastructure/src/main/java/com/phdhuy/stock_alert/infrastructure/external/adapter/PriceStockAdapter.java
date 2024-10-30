@@ -7,6 +7,9 @@ import com.phdhuy.stock_alert.shared.config.WebDriverConfig;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import java.net.MalformedURLException;
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import lombok.RequiredArgsConstructor;
@@ -33,7 +36,11 @@ public class PriceStockAdapter extends TextWebSocketHandler {
       throws JsonProcessingException, InterruptedException, MalformedURLException {
     WebDriver webDriver = webDriverConfig.getWebDriver();
     webDriver.get(CommonConstant.PRICE_STOCK);
+    ZoneId zoneId = ZoneId.of("Asia/Bangkok");
+
     while (true) {
+      LocalTime currentTimeInUTC7 = ZonedDateTime.now(zoneId).toLocalTime();
+      log.info("time {}", currentTimeInUTC7);
       WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
       Map<String, String> priceMap = new HashMap<>();
       List<WebElement> priceElements = new ArrayList<>();
