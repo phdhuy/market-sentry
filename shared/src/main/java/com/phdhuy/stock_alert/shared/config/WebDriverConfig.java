@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebDriverConfig {
 
-  private static WebDriver driver;
+  private WebDriver driver = null;
 
   public WebDriver getWebDriver() throws MalformedURLException {
     if (driver == null) {
@@ -34,13 +34,11 @@ public class WebDriverConfig {
     return driver;
   }
 
-  public void reinitializeWebDriver() throws MalformedURLException, InterruptedException {
+  public void quitWebDriver() {
     if (driver != null) {
       driver.manage().deleteAllCookies();
       driver.quit();
       driver = null;
-      Thread.sleep(10000);
-      getWebDriver();
     }
   }
 }

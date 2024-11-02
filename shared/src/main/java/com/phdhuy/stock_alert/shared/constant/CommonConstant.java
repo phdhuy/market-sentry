@@ -32,14 +32,5 @@ public final class CommonConstant {
 
   public static final String VALUE = "_value";
 
-  public static final String ZONE_ID = "Asia/Jakarta";
-
-  public static final String MARKET_STATUS_CLASS_NAME = "chart-footer-vn30";
-
-  public static final String MARKET_STATUS_XPATH =
-      "//div[contains(@class, 'chart-footer-vn30')]//div";
-
-  public static final String MARKET_STATUS_IS_CLOSED = "Đóng cửa";
-
-  public static final String MARKET_STATUS_IS_BREAK = "Nghỉ trưa";
+  public static final String ZONE_ID = "Asia/Bangkok";
 }
