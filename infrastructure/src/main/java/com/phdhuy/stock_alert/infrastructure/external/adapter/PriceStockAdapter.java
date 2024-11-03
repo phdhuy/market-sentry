@@ -91,8 +91,15 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   private void waitUntilNextMarketOpen(ZoneId zoneId, LocalTime marketOpen)
       throws InterruptedException {
     LocalTime now = ZonedDateTime.now(zoneId).toLocalTime();
-    long sleepTime = Duration.between(now, marketOpen).toMillis();
-    Thread.sleep(sleepTime);
-    log.info("Waiting until next market open at {}, sleep time {}", marketOpen, sleepTime);
+    if (now.isAfter(marketOpen)) {
+      LocalTime nextDayMarketOpen = marketOpen.plusHours(24);
+      long sleepTime = Duration.between(now, nextDayMarketOpen).toMillis();
+      Thread.sleep(sleepTime);
+      log.info("until next market open at {}, sleep time {}", marketOpen, sleepTime);
+    } else {
+      long sleepTime = Duration.between(now, marketOpen).toMillis();
+      Thread.sleep(sleepTime);
+      log.info("Waiting until next market open at {}, sleep time {}", marketOpen, sleepTime);
+    }
   }
 }
