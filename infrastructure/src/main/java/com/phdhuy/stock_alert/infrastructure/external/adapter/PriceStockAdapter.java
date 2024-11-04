@@ -34,7 +34,9 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   public void getStockPrice()
       throws JsonProcessingException, InterruptedException, MalformedURLException {
     ZoneId zoneId = ZoneId.of(CommonConstant.ZONE_ID);
-    LocalTime marketOpen = LocalTime.of(9, 0);
+    LocalTime morningOpen = LocalTime.of(9, 0);
+    LocalTime morningClose = LocalTime.of(11, 30);
+    LocalTime afternoonOpen = LocalTime.of(13, 0);
     LocalTime marketClose = LocalTime.of(15, 0);
 
     while (true) {
@@ -43,7 +45,8 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         webDriver.get(CommonConstant.PRICE_STOCK);
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
 
-        while (isMarketOpen(zoneId, marketOpen, marketClose)) {
+        while (isMarketOpen(zoneId, morningOpen, morningClose)
+            || isMarketOpen(zoneId, afternoonOpen, marketClose)) {
           Map<String, String> priceMap = this.getPriceStock(wait);
           if (!priceMap.isEmpty()) {
             sendToRabbitMQ(priceMap);
@@ -52,7 +55,11 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         }
       } finally {
         webDriverConfig.quitWebDriver();
-        this.waitUntilNextMarketOpen(zoneId, marketOpen);
+        if (this.isMarketInBreakTime(zoneId, morningClose, afternoonOpen)) {
+          this.waitUntilNextMarketOpen(zoneId, afternoonOpen);
+        } else {
+          this.waitUntilNextMarketOpen(zoneId, morningOpen);
+        }
       }
     }
   }
@@ -61,6 +68,13 @@ public class PriceStockAdapter extends TextWebSocketHandler {
     LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
     log.info("Current time: {}", currentTime);
     return currentTime.isAfter(marketOpen) && currentTime.isBefore(marketClose);
+  }
+
+  private boolean isMarketInBreakTime(
+      ZoneId zoneId, LocalTime morningClose, LocalTime afternoonOpen) {
+    LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
+    log.info("Current time (break time): {}", currentTime);
+    return currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen);
   }
 
   private Map<String, String> getPriceStock(WebDriverWait wait) {
