@@ -35,7 +35,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
       throws JsonProcessingException, InterruptedException, MalformedURLException {
     ZoneId zoneId = ZoneId.of(CommonConstant.ZONE_ID);
     LocalTime marketOpen = LocalTime.of(9, 0);
-    LocalTime marketClose = LocalTime.of(16, 0);
+    LocalTime marketClose = LocalTime.of(15, 0);
 
     while (true) {
       WebDriver webDriver = webDriverConfig.getWebDriver();
