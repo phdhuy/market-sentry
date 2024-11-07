@@ -1,4 +1,4 @@
-package com.phdhuy.stock_alert.domain.auth.model;
+package com.phdhuy.stock_alert.infrastructure.security.domain;
 
 import lombok.Getter;
 import lombok.Setter;

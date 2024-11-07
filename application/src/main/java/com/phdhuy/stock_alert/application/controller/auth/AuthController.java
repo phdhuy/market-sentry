@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.application.controller.auth;
 
-import com.phdhuy.stock_alert.domain.auth.ports.inbound.CreateTokenUseCase;
 import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
+import com.phdhuy.stock_alert.infrastructure.security.adapters.TokenUtilsAdapter;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.BadRequestException;
 import com.phdhuy.stock_alert.shared.exception.UnauthorizedException;
@@ -21,14 +21,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/v1/auth")
+@RequestMapping("api/v1/auth")
 @RequiredArgsConstructor
 @Tag(name = "Auth APIs")
 public class AuthController {
 
   private final CreateUserUseCase createUserUseCase;
 
-  private final CreateTokenUseCase createTokenUseCase;
+  private final TokenUtilsAdapter tokenUtilsAdapter;
 
   private final AuthenticationManager authenticationManager;
 
@@ -53,8 +53,7 @@ public class AuthController {
       UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
       return ResponseEntity.ok(
-          ResponseDataAPI.successWithoutMeta(
-              createTokenUseCase.createToken(userPrincipal.getId())));
+          ResponseDataAPI.successWithoutMeta(tokenUtilsAdapter.createToken(userPrincipal.getId())));
     } catch (BadCredentialsException e) {
       throw new BadRequestException(MessageConstant.INCORRECT_EMAIL_OR_PASSWORD);
     } catch (InternalAuthenticationServiceException e) {
@@ -71,6 +70,6 @@ public class AuthController {
       @Valid @RequestBody RefreshTokenRequest refreshToken) {
     return ResponseEntity.ok(
         ResponseDataAPI.successWithoutMeta(
-            createTokenUseCase.refreshToken(refreshToken.getRefreshToken())));
+            tokenUtilsAdapter.refreshToken(refreshToken.getRefreshToken())));
   }
 }
