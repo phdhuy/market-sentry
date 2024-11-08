@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebDriverConfig {
 
-  private static WebDriver driver;
+  private WebDriver driver = null;
 
   public WebDriver getWebDriver() throws MalformedURLException {
     if (driver == null) {
@@ -24,17 +24,21 @@ public class WebDriverConfig {
       options.addArguments("--disable-application-cache");
       options.addArguments("--disable-dev-shm-usage");
 
+      options.addPreference("browser.cache.disk.enable", false);
+      options.addPreference("browser.cache.memory.enable", false);
+      options.addPreference("browser.cache.offline.enable", false);
+      options.addPreference("network.http.use-cache", false);
+
       driver = new RemoteWebDriver(new URL("http://selenium:4444/wd/hub"), options);
     }
     return driver;
   }
 
-  public void reinitializeWebDriver() throws MalformedURLException, InterruptedException {
+  public void quitWebDriver() {
     if (driver != null) {
+      driver.manage().deleteAllCookies();
       driver.quit();
       driver = null;
-      Thread.sleep(3000);
-      getWebDriver();
     }
   }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.Executors;
@@ -23,14 +24,16 @@ import org.springframework.stereotype.Service;
 public class PriceCryptoAdapter {
 
   private final RabbitMQPort rabbitMQPort;
+  private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+  private final ObjectMapper objectMapper = new ObjectMapper();
 
-  private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
-
-  private static final int RECONNECT_DELAY = 3;
+  private static final int INITIAL_RECONNECT_DELAY = 3;
+  private static final int MAX_RECONNECT_DELAY = 60;
+  private static final int MAX_RETRIES = 10;
 
   private volatile boolean isConnected = false;
-
   private WebSocketClient webSocketClient;
+  private int reconnectAttempts = 0;
 
   @PostConstruct
   public void connect() {
@@ -53,6 +56,7 @@ public class PriceCryptoAdapter {
           public void onOpen(ServerHandshake handshakedata) {
             log.info("WebSocket connection opened");
             isConnected = true;
+            reconnectAttempts = 0;
             String subscribeMessage =
                 "{\"method\": \"SUBSCRIBE\", \"params\": [\"btcusdt@ticker\"], \"id\": 1}";
             send(subscribeMessage);
@@ -60,12 +64,15 @@ public class PriceCryptoAdapter {
 
           @Override
           public void onMessage(String message) {
-            try {
-              JsonNode node = new ObjectMapper().readTree(message);
-              rabbitMQPort.sendMessage(node.toString());
-            } catch (JsonProcessingException e) {
-              log.error("Error parsing JSON message:", e);
-            }
+            scheduler.execute(
+                () -> {
+                  try {
+                    JsonNode node = objectMapper.readTree(message);
+                    rabbitMQPort.sendMessage(node.toString());
+                  } catch (JsonProcessingException e) {
+                    log.error("Error parsing JSON message:", e);
+                  }
+                });
           }
 
           @Override
@@ -87,16 +94,34 @@ public class PriceCryptoAdapter {
   }
 
   private void scheduleReconnect() {
+    if (reconnectAttempts >= MAX_RETRIES) {
+      log.error("Max reconnect attempts reached. Aborting reconnection.");
+      return;
+    }
+
+    int delay =
+        Math.min(
+            INITIAL_RECONNECT_DELAY * (int) Math.pow(2, reconnectAttempts), MAX_RECONNECT_DELAY);
+    reconnectAttempts++;
     scheduler.schedule(
         () -> {
-          log.info("### Reconnecting...");
+          log.info("Reconnecting attempt {}...", reconnectAttempts);
           try {
             connectWebSocket();
           } catch (URISyntaxException e) {
             log.error("Invalid WebSocket URL", e);
           }
         },
-        RECONNECT_DELAY,
+        delay,
         TimeUnit.SECONDS);
+  }
+
+  @PreDestroy
+  public void shutdown() {
+    log.info("Shutting down WebSocket client and scheduler");
+    if (webSocketClient != null && webSocketClient.isOpen()) {
+      webSocketClient.close();
+    }
+    scheduler.shutdown();
   }
 }
