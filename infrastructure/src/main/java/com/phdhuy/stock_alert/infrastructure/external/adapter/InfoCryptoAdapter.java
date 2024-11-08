@@ -36,7 +36,7 @@ public class InfoCryptoAdapter {
       JsonNode root = objectMapper.readTree(responseBody);
       JsonNode dataNode = root.path("data");
       for (JsonNode cryptoNode : dataNode) {
-        assetList.add(this.convertToCrypto(cryptoNode));
+        assetList.add(this.convertToAsset(cryptoNode));
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -44,7 +44,7 @@ public class InfoCryptoAdapter {
     return assetList;
   }
 
-  private Asset convertToCrypto(JsonNode cryptoNode) {
+  private Asset convertToAsset(JsonNode cryptoNode) {
     return Asset.builder()
         .identity(cryptoNode.get("id").asText())
         .rank(cryptoNode.get("rank").asLong())

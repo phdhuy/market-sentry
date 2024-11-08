@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/v1/assets")
+@RequestMapping("api/v1/assets")
 @RequiredArgsConstructor
 @Tag(name = "Asset APIs")
 public class AssetController {
@@ -63,10 +63,5 @@ public class AssetController {
     return ResponseEntity.ok(
         ResponseDataAPI.successWithoutMeta(
             getPriceHistoryAssetUseCase.getPriceHistoryAsset(assetId, interval)));
-  }
-
-  @GetMapping("/hello")
-  public ResponseEntity<ResponseDataAPI> helloWorld() {
-    return ResponseEntity.ok(ResponseDataAPI.successWithoutMeta("hello world"));
   }
 }

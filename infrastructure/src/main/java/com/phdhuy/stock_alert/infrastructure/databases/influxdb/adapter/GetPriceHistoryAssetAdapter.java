@@ -1,12 +1,10 @@
 package com.phdhuy.stock_alert.infrastructure.databases.influxdb.adapter;
 
-import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.QueryApi;
 import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetPriceHistoryAssetPort;
-import com.phdhuy.stock_alert.infrastructure.databases.influxdb.utils.FluxQueryUtils;
+import com.phdhuy.stock_alert.infrastructure.databases.influxdb.repository.PriceAssetRepository;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.PriceAssetMapper;
@@ -27,7 +25,7 @@ public class GetPriceHistoryAssetAdapter implements GetPriceHistoryAssetPort {
 
   private final AssetRepository assetRepository;
 
-  private final InfluxDBClient influxDBClient;
+  private final PriceAssetRepository priceAssetRepository;
 
   private final PriceAssetMapper priceAssetMapper;
 
@@ -38,10 +36,8 @@ public class GetPriceHistoryAssetAdapter implements GetPriceHistoryAssetPort {
             .findById(assetId)
             .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
 
-    QueryApi queryApi = influxDBClient.getQueryApi();
-    String fluxQuery = FluxQueryUtils.getPriceHistoryAsset(assetEntity.getIdentity(), interval);
-
-    List<FluxTable> tables = queryApi.query(fluxQuery);
+    List<FluxTable> tables =
+        priceAssetRepository.getPriceHistoryAsset(assetEntity.getIdentity(), interval);
     List<PriceAsset> priceAssets = new ArrayList<>();
     for (FluxTable table : tables) {
       for (FluxRecord fluxRecord : table.getRecords()) {
