@@ -1,5 +1,8 @@
 package com.phdhuy.stock_alert.domain.user.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.phdhuy.stock_alert.shared.enums.Role;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -8,6 +11,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class User {
 
   private UUID id;
