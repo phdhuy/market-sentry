@@ -2,6 +2,8 @@ package com.phdhuy.stock_alert.shared.config;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -12,7 +14,7 @@ public class WebDriverConfig {
 
   private WebDriver driver = null;
 
-  public WebDriver getWebDriver() throws MalformedURLException {
+  public WebDriver getWebDriver() throws MalformedURLException, NoSuchSessionException {
     if (driver == null) {
       FirefoxOptions options = new FirefoxOptions();
       options.addArguments("--headless");
