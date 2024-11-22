@@ -40,8 +40,8 @@ public class PriceStockAdapter extends TextWebSocketHandler {
     LocalTime marketClose = LocalTime.of(15, 0);
 
     while (true) {
-      WebDriver webDriver = webDriverConfig.getWebDriver();
       try {
+        WebDriver webDriver = webDriverConfig.getWebDriver();
         webDriver.get(CommonConstant.PRICE_STOCK);
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
 
@@ -53,8 +53,6 @@ public class PriceStockAdapter extends TextWebSocketHandler {
           }
           Thread.sleep(4000);
         }
-      } catch (NoSuchSessionException e) {
-        log.error("No such session exception");
       }
       finally {
         webDriverConfig.quitWebDriver();
@@ -69,7 +67,6 @@ public class PriceStockAdapter extends TextWebSocketHandler {
 
   private boolean isMarketOpen(ZoneId zoneId, LocalTime marketOpen, LocalTime marketClose) {
     LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
-    log.info("Current time: {}", currentTime);
     return currentTime.isAfter(marketOpen) && currentTime.isBefore(marketClose);
   }
 
