@@ -45,8 +45,6 @@ services:
     tmpfs:
       - /tmp:exec,size=512m
       - /dev/shm:exec,size=1g
-    mem_limit: 500m
-    restart: always
 
   backend:
     build:
