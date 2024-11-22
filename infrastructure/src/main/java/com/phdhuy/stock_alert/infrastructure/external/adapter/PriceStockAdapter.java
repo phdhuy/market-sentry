@@ -53,7 +53,10 @@ public class PriceStockAdapter extends TextWebSocketHandler {
           }
           Thread.sleep(4000);
         }
-      } finally {
+      } catch (NoSuchSessionException e) {
+        log.error("No such session exception");
+      }
+      finally {
         webDriverConfig.quitWebDriver();
         if (this.isMarketInBreakTime(zoneId, morningClose, afternoonOpen)) {
           this.waitUntilNextMarketOpen(zoneId, afternoonOpen);
@@ -89,7 +92,6 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         String price = stock.getText();
         priceMap.put(id, price);
       }
-      log.info("Scraping stock price");
     } catch (TimeoutException e) {
       log.error("Element not found within the specified timeout.");
     }
