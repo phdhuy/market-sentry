@@ -1,32 +1,35 @@
-package com.phdhuy.stock_alert.infrastructure.job;
+package com.phdhuy.stock_alert.infrastructure.external.job;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.ExistsCryptoPort;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset.CreateAssetAdapter;
-import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoCryptoAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoStockAdapter;
+import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class CryptoInfoSyncJob {
+@Slf4j
+public class StockInfoJob {
 
   private final CreateAssetAdapter createAssetAdapter;
 
-  private final InfoCryptoAdapter infoCryptoAdapter;
+  private final InfoStockAdapter infoStockAdapter;
 
   private final ExistsCryptoPort existsCryptoPort;
 
-  @Scheduled(cron = "*/60 * * * * *")
-  public void crawlDataCryptoAndSaveToDB() {
-    List<Asset> assetList = infoCryptoAdapter.crawlDataCrypto();
+  @Scheduled(cron = "0 0 17 * * *")
+  public void crawlDataStockAndSaveToDB() throws IOException {
+    List<Asset> assetList = infoStockAdapter.crawlDataStock();
     for (Asset asset : assetList) {
       if (existsCryptoPort.existsByIdentity(asset.getIdentity())) {
-        createAssetAdapter.updateCrypto(asset);
+        createAssetAdapter.updateStock(asset);
       } else {
-        createAssetAdapter.createCrypto(asset);
+        createAssetAdapter.createStock(asset);
       }
     }
   }

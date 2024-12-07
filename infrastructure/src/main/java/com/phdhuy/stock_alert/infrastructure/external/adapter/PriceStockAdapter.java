@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
 import com.phdhuy.stock_alert.shared.config.WebDriverConfig;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
-import java.net.MalformedURLException;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -32,9 +31,9 @@ public class PriceStockAdapter extends TextWebSocketHandler {
 
   @EventListener(ApplicationReadyEvent.class)
   public void getStockPrice()
-      throws JsonProcessingException, InterruptedException, MalformedURLException {
+      throws JsonProcessingException, InterruptedException {
     ZoneId zoneId = ZoneId.of(CommonConstant.ZONE_ID);
-    LocalTime morningOpen = LocalTime.of(9, 0);
+    LocalTime marketOpen = LocalTime.of(9, 0);
     LocalTime morningClose = LocalTime.of(11, 30);
     LocalTime afternoonOpen = LocalTime.of(13, 0);
     LocalTime marketClose = LocalTime.of(15, 0);
@@ -45,8 +44,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         webDriver.get(CommonConstant.PRICE_STOCK);
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
 
-        while (isMarketOpen(zoneId, morningOpen, morningClose)
-            || isMarketOpen(zoneId, afternoonOpen, marketClose)) {
+        while (isMarketOpen(zoneId, marketOpen, marketClose)) {
           Map<String, String> priceMap = this.getPriceStock(wait);
           if (!priceMap.isEmpty()) {
             sendToRabbitMQ(priceMap);
@@ -59,7 +57,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         if (this.isMarketInBreakTime(zoneId, morningClose, afternoonOpen)) {
           this.waitUntilNextMarketOpen(zoneId, afternoonOpen);
         } else {
-          this.waitUntilNextMarketOpen(zoneId, morningOpen);
+          this.waitUntilNextMarketOpen(zoneId, marketOpen);
         }
       }
     }
