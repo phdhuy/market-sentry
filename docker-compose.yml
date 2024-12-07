@@ -32,19 +32,19 @@ services:
       INFLUXDB_ADMIN_PASSWORD: duchuy1311
     volumes:
       - influxdb-data:/var/lib/influxdb2
-
-  selenium:
-    image: selenium/standalone-firefox:latest
-    container_name: selenium-firefox
-    ports:
-      - "4444:4444"
-    shm_size: 256m
-    environment:
-      SE_START_VNC: 0
-      SE_ENABLE_TRACING: 0
-    tmpfs:
-      - /tmp:exec,size=512m
-      - /dev/shm:exec,size=1g
+#
+#  selenium:
+#    image: selenium/standalone-firefox:latest
+#    container_name: selenium-firefox
+#    ports:
+#      - "4444:4444"
+#    shm_size: 256m
+#    environment:
+#      SE_START_VNC: 0
+#      SE_ENABLE_TRACING: 0
+#    tmpfs:
+#      - /tmp:exec,size=512m
+#      - /dev/shm:exec,size=1g
 
   backend:
     build:
@@ -55,7 +55,6 @@ services:
       - postgres
       - rabbitmq
       - influxdb
-      - selenium
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stock-alert
       SPRING_DATASOURCE_USERNAME: postgres
@@ -75,7 +74,6 @@ services:
       - postgres
       - rabbitmq
       - influxdb
-      - selenium
 
 volumes:
   postgres-data:

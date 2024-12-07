@@ -17,6 +17,31 @@ RUN mvn clean package -DskipTests
 
 FROM openjdk:19-alpine
 
+
+RUN apk update && apk add --no-cache \
+    firefox \
+    xvfb \
+    dbus \
+    ttf-freefont \
+    fontconfig \
+    libx11 \
+    libxrender \
+    libxext \
+    libxtst \
+    libxdamage \
+    libxcomposite \
+    libxrandr \
+    alsa-lib \
+    libgcc \
+    libstdc++ \
+    mesa-dri-gallium
+
+RUN wget -q https://github.com/mozilla/geckodriver/releases/download/v0.33.0/geckodriver-v0.33.0-linux64.tar.gz \
+    && tar -xvzf geckodriver-v0.33.0-linux64.tar.gz \
+    && mv geckodriver /usr/local/bin/ \
+    && chmod +x /usr/local/bin/geckodriver \
+    && rm geckodriver-v0.33.0-linux64.tar.gz
+
 WORKDIR /usr/app
 
 COPY --from=build /usr/src/app/web/target/web-0.0.1-SNAPSHOT.jar /usr/app
