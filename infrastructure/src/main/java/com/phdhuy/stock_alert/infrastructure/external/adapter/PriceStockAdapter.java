@@ -5,10 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
 import com.phdhuy.stock_alert.shared.config.WebDriverConfig;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
-import java.time.Duration;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +28,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   private final WebDriverConfig webDriverConfig;
 
   @EventListener(ApplicationReadyEvent.class)
-  public void getStockPrice()
-      throws JsonProcessingException, InterruptedException {
+  public void getStockPrice() throws JsonProcessingException, InterruptedException {
     ZoneId zoneId = ZoneId.of(CommonConstant.ZONE_ID);
     LocalTime marketOpen = LocalTime.of(9, 0);
     LocalTime morningClose = LocalTime.of(11, 30);
@@ -40,38 +37,87 @@ public class PriceStockAdapter extends TextWebSocketHandler {
 
     while (true) {
       try {
+        LocalDate today = LocalDate.now(zoneId);
+        DayOfWeek dayOfWeek = today.getDayOfWeek();
+        if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+          log.info("Market closed on weekends. Waiting until Monday.");
+          this.waitUntilNextWeekday(zoneId, marketOpen);
+          continue;
+        }
+
         WebDriver webDriver = webDriverConfig.getWebDriver();
         webDriver.get(CommonConstant.PRICE_STOCK);
         WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
 
-        while (isMarketOpen(zoneId, marketOpen, marketClose)) {
-          Map<String, String> priceMap = this.getPriceStock(wait);
-          if (!priceMap.isEmpty()) {
-            sendToRabbitMQ(priceMap);
-          }
-          Thread.sleep(4000);
+        if (isMarketOpen(zoneId, marketOpen, morningClose)) {
+          runMarketSession(wait, zoneId, marketOpen, morningClose);
         }
-      }
-      finally {
-        webDriverConfig.quitWebDriver();
+
         if (this.isMarketInBreakTime(zoneId, morningClose, afternoonOpen)) {
           this.waitUntilNextMarketOpen(zoneId, afternoonOpen);
-        } else {
-          this.waitUntilNextMarketOpen(zoneId, marketOpen);
+        }
+
+        if (isMarketOpen(zoneId, afternoonOpen, marketClose)) {
+          runMarketSession(wait, zoneId, afternoonOpen, marketClose);
+        }
+      } finally {
+        webDriverConfig.quitWebDriver();
+
+        if (ZonedDateTime.now(zoneId).toLocalTime().isAfter(marketClose)) {
+          log.info("Market closed for the day. Waiting until the next market open.");
+          this.waitUntilNextMarketOpenOrWeekday(zoneId, marketOpen);
         }
       }
     }
   }
 
-  private boolean isMarketOpen(ZoneId zoneId, LocalTime marketOpen, LocalTime marketClose) {
+  private void runMarketSession(
+      WebDriverWait wait, ZoneId zoneId, LocalTime sessionStart, LocalTime sessionEnd)
+      throws JsonProcessingException, InterruptedException {
+    while (isMarketOpen(zoneId, sessionStart, sessionEnd)) {
+      Map<String, String> priceMap = this.getPriceStock(wait);
+      if (!priceMap.isEmpty()) {
+        sendToRabbitMQ(priceMap);
+      }
+      Thread.sleep(4000);
+    }
+  }
+
+  private void waitUntilNextWeekday(ZoneId zoneId, LocalTime marketOpen)
+      throws InterruptedException {
+    ZonedDateTime now = ZonedDateTime.now(zoneId);
+    ZonedDateTime nextMarketOpen =
+        now.with(TemporalAdjusters.next(DayOfWeek.MONDAY)).with(marketOpen);
+
+    long sleepTime = Duration.between(now, nextMarketOpen).toMillis();
+    log.info("Next weekday market open at {}", nextMarketOpen);
+    Thread.sleep(sleepTime);
+  }
+
+  private void waitUntilNextMarketOpenOrWeekday(ZoneId zoneId, LocalTime marketOpen)
+      throws InterruptedException {
+    ZonedDateTime now = ZonedDateTime.now(zoneId);
+    DayOfWeek today = now.getDayOfWeek();
+
+    if (today == DayOfWeek.FRIDAY) {
+      waitUntilNextWeekday(zoneId, marketOpen);
+      return;
+    }
+
+    ZonedDateTime nextMarketOpen = now.plusDays(1).with(marketOpen);
+    long sleepTime = Duration.between(now, nextMarketOpen).toMillis();
+    log.info("Waiting until next market open: {}", nextMarketOpen);
+    Thread.sleep(sleepTime);
+  }
+
+  private boolean isMarketOpen(ZoneId zoneId, LocalTime sessionStart, LocalTime sessionEnd) {
     LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
-    return currentTime.isAfter(marketOpen) && currentTime.isBefore(marketClose);
+    return currentTime.isAfter(sessionStart) && currentTime.isBefore(sessionEnd);
   }
 
   private boolean isMarketInBreakTime(
       ZoneId zoneId, LocalTime morningClose, LocalTime afternoonOpen) {
     LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
-    log.info("Current time (break time): {}", currentTime);
     return currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen);
   }
 
@@ -107,10 +153,8 @@ public class PriceStockAdapter extends TextWebSocketHandler {
     if (now.toLocalTime().isAfter(marketOpen)) {
       nextMarketOpen = nextMarketOpen.plusDays(1);
     }
-    log.info("Next market open at {}", nextMarketOpen);
     long sleepTime = Duration.between(now, nextMarketOpen).toMillis();
-    log.info("Sleep time {}", sleepTime);
-    Thread.sleep(sleepTime);
     log.info("Waiting until next market open at {}, sleep time {}", nextMarketOpen, sleepTime);
+    Thread.sleep(sleepTime);
   }
 }
