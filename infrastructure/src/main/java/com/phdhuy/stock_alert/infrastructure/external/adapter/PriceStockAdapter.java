@@ -40,7 +40,6 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         LocalDate today = LocalDate.now(zoneId);
         DayOfWeek dayOfWeek = today.getDayOfWeek();
         if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-          log.info("Market closed on weekends. Waiting until Monday.");
           this.waitUntilNextWeekday(zoneId, marketOpen);
           continue;
         }
@@ -64,7 +63,6 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         webDriverConfig.quitWebDriver();
 
         if (ZonedDateTime.now(zoneId).toLocalTime().isAfter(marketClose)) {
-          log.info("Market closed for the day. Waiting until the next market open.");
           this.waitUntilNextMarketOpenOrWeekday(zoneId, marketOpen);
         }
       }
@@ -133,8 +131,8 @@ public class PriceStockAdapter extends TextWebSocketHandler {
         String price = stock.getText();
         priceMap.put(id, price);
       }
-    } catch (TimeoutException e) {
-      log.error("Element not found within the specified timeout.");
+    } catch (TimeoutException ignored) {
+      // do nothing
     }
     return priceMap;
   }
