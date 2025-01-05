@@ -1,30 +1,37 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
-import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetAllAssetPort;
+import com.phdhuy.stock_alert.domain.asset.ports.outbound.AssetRepositoryPort;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetLatestPriceAssetPort;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.AssetMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
-import java.util.HashMap;
-import java.util.List;
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 @PersistenceAdapter
 @RequiredArgsConstructor
-@Slf4j
-public class GetAllAssetAdapter implements GetAllAssetPort {
+public class AssetRepositoryAdapter implements AssetRepositoryPort {
 
   private final AssetRepository assetRepository;
 
   private final GetLatestPriceAssetPort getLatestPriceAssetPort;
 
   private final AssetMapper assetMapper;
+
+  @Override
+  public boolean existsByIdentity(String identity) {
+    return assetRepository.existsByIdentity(identity);
+  }
 
   @Override
   public Page<Asset> getAllAsset(Pageable pageable, String type, List<String> query) {
@@ -46,7 +53,22 @@ public class GetAllAssetAdapter implements GetAllAssetPort {
 
   private Asset mapToAsset(AssetEntity assetEntity, HashMap<String, Double> latestPrices) {
     Double latestPrice = latestPrices.get(assetEntity.getIdentity());
+    return assetMapper.toAssetFromAssetEntity(assetEntity, latestPrice != null ? latestPrice : 0.0);
+  }
+
+  @Override
+  public Asset getDetailAsset(UUID id) {
+    AssetEntity assetEntity =
+        assetRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
     return assetMapper.toAssetFromAssetEntity(
-            assetEntity, latestPrice != null ? latestPrice : 0.0);
+        assetEntity, getLatestPriceAssetPort.getLatestPriceAsset(assetEntity.getIdentity()));
+  }
+
+  public AssetEntity findAssetEntityById(UUID id) {
+    return assetRepository
+        .findById(id)
+        .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
   }
 }

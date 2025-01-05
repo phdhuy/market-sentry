@@ -25,3 +25,6 @@ auth:
   tokenExpirationMsec: 7200000
   refreshTokenSecret: 29110aaf4cb5050c89059c886aa5fa68c97738076721bc6b9f657eb31e0befc5
   refreshTokenExpirationMsec: 2592000000
+springdoc:
+  swagger-ui:
+    path: /api/index.html
