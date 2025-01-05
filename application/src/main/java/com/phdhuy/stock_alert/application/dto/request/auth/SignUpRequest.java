@@ -1,4 +1,4 @@
-package com.phdhuy.stock_alert.application.request.auth;
+package com.phdhuy.stock_alert.application.dto.request.auth;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -10,9 +10,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class SignInRequest {
+public class SignUpRequest {
 
   @NotBlank @Email private String email;
 
   @NotBlank private String password;
+
+  @NotBlank private String confirmPassword;
 }

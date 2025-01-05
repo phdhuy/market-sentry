@@ -1,0 +1,31 @@
+package com.phdhuy.stock_alert.domain.alert.model;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.Builder;
+import lombok.Data;
+
+import java.sql.Timestamp;
+import java.util.UUID;
+
+@Data
+@Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+public class Alert {
+
+  private UUID id;
+
+  private String alertType;
+
+  private String alertConditionType;
+
+  private Double value;
+
+  private String triggerType;
+
+  private Timestamp expirationAt;
+
+  private String alertStatus;
+}

@@ -1,15 +1,17 @@
 package com.phdhuy.stock_alert.application.controller.auth;
 
+import com.phdhuy.stock_alert.application.dto.request.auth.RefreshTokenRequest;
+import com.phdhuy.stock_alert.application.dto.request.auth.SignInRequest;
+import com.phdhuy.stock_alert.application.dto.request.auth.SignUpRequest;
+import com.phdhuy.stock_alert.application.mapper.UserDTOMapper;
+import com.phdhuy.stock_alert.domain.user.model.User;
 import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
 import com.phdhuy.stock_alert.infrastructure.security.adapters.TokenUtilsAdapter;
+import com.phdhuy.stock_alert.infrastructure.security.domain.UserPrincipal;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.BadRequestException;
 import com.phdhuy.stock_alert.shared.exception.UnauthorizedException;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
-import com.phdhuy.stock_alert.application.request.auth.RefreshTokenRequest;
-import com.phdhuy.stock_alert.application.request.auth.SignInRequest;
-import com.phdhuy.stock_alert.application.request.auth.SignUpRequest;
-import com.phdhuy.stock_alert.infrastructure.security.domain.UserPrincipal;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -32,14 +34,17 @@ public class AuthController {
 
   private final AuthenticationManager authenticationManager;
 
+  private final UserDTOMapper userDTOMapper;
+
   @PostMapping("/sign-up")
   public ResponseEntity<ResponseDataAPI> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
+    User user =
+        createUserUseCase.createUser(
+            signUpRequest.getEmail(),
+            signUpRequest.getPassword(),
+            signUpRequest.getConfirmPassword());
     return ResponseEntity.ok(
-        ResponseDataAPI.successWithoutMeta(
-            createUserUseCase.createUser(
-                signUpRequest.getEmail(),
-                signUpRequest.getPassword(),
-                signUpRequest.getConfirmPassword())));
+        ResponseDataAPI.successWithoutMeta(userDTOMapper.toUserInfoResponse(user)));
   }
 
   @PostMapping("/sign-in")
