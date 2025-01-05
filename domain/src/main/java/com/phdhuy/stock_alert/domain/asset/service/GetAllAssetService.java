@@ -2,7 +2,7 @@ package com.phdhuy.stock_alert.domain.asset.service;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.asset.ports.inbound.GetAllAssetUseCase;
-import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetAllAssetPort;
+import com.phdhuy.stock_alert.domain.asset.ports.outbound.AssetRepositoryPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import com.phdhuy.stock_alert.shared.payload.general.PageInfo;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
@@ -15,11 +15,11 @@ import org.springframework.data.domain.Pageable;
 @RequiredArgsConstructor
 public class GetAllAssetService implements GetAllAssetUseCase {
 
-  private final GetAllAssetPort getAllAssetPort;
+  private final AssetRepositoryPort assetRepositoryPort;
 
   @Override
   public ResponseDataAPI getAllAsset(Pageable pageable, String type, List<String> query) {
-    Page<Asset> assets = getAllAssetPort.getAllAsset(pageable, type, query);
+    Page<Asset> assets = assetRepositoryPort.getAllAsset(pageable, type, query);
 
     PageInfo pageInfo =
         new PageInfo(

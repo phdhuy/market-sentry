@@ -2,7 +2,7 @@ package com.phdhuy.stock_alert.domain.user.service;
 
 import com.phdhuy.stock_alert.domain.user.model.User;
 import com.phdhuy.stock_alert.domain.user.ports.inbound.FindUserByIdUseCase;
-import com.phdhuy.stock_alert.domain.user.ports.outbound.FindUserByIdPort;
+import com.phdhuy.stock_alert.domain.user.ports.outbound.UserRepositoryPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +11,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FindUserByIdService implements FindUserByIdUseCase {
 
-  private final FindUserByIdPort findUserByIdPort;
+  private final UserRepositoryPort userRepositoryPort;
 
   @Override
   public User findById(UUID id) {
-    return findUserByIdPort.findByUserId(id);
+    return userRepositoryPort.findByUserId(id);
   }
 }

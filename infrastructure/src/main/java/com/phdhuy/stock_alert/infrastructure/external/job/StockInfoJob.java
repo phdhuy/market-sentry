@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.external.job;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
-import com.phdhuy.stock_alert.domain.asset.ports.outbound.ExistsCryptoPort;
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset.AssetRepositoryAdapter;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset.CreateAssetAdapter;
 import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoStockAdapter;
 import java.io.IOException;
@@ -20,13 +20,13 @@ public class StockInfoJob {
 
   private final InfoStockAdapter infoStockAdapter;
 
-  private final ExistsCryptoPort existsCryptoPort;
+  private final AssetRepositoryAdapter assetRepositoryAdapter;
 
   @Scheduled(cron = "0 0 17 * * *")
   public void crawlDataStockAndSaveToDB() throws IOException {
     List<Asset> assetList = infoStockAdapter.crawlDataStock();
     for (Asset asset : assetList) {
-      if (existsCryptoPort.existsByIdentity(asset.getIdentity())) {
+      if (assetRepositoryAdapter.existsByIdentity(asset.getIdentity())) {
         createAssetAdapter.updateStock(asset);
       } else {
         createAssetAdapter.createStock(asset);
