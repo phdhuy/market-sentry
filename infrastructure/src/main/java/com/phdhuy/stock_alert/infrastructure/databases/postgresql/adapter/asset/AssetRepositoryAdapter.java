@@ -71,4 +71,14 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
         .findById(id)
         .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
   }
+
+  @Override
+  public Asset getDetailAsset(UUID id) {
+    AssetEntity assetEntity =
+        assetRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
+    return assetMapper.toAssetFromAssetEntity(
+        assetEntity, getLatestPriceAssetPort.getLatestPriceAsset(assetEntity.getIdentity()));
+  }
 }
