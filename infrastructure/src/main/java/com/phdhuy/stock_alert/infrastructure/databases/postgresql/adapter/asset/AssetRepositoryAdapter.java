@@ -37,16 +37,16 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
   public Page<Asset> getAllAsset(Pageable pageable, String type, List<String> query) {
     boolean isAll = query.isEmpty();
     Page<AssetEntity> assetSummaries =
-        assetRepository.getAllAssetSummary(pageable, type, query, isAll);
+            assetRepository.getAllAssetSummary(pageable, type, query, isAll);
     List<String> symbols =
-        assetSummaries.getContent().stream().map(AssetEntity::getIdentity).toList();
+            assetSummaries.getContent().stream().map(AssetEntity::getIdentity).toList();
 
     HashMap<String, Double> latestPrices = getLatestPriceAssetPort.getLatestPriceAssets(symbols);
 
     List<Asset> assets =
-        assetSummaries.getContent().stream()
-            .map(summary -> mapToAsset(summary, latestPrices))
-            .toList();
+            assetSummaries.getContent().stream()
+                    .map(summary -> mapToAsset(summary, latestPrices))
+                    .toList();
 
     return new PageImpl<>(assets, pageable, assetSummaries.getTotalElements());
   }
@@ -70,5 +70,15 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
     return assetRepository
         .findById(id)
         .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
+  }
+
+  @Override
+  public Asset getDetailAsset(UUID id) {
+    AssetEntity assetEntity =
+        assetRepository
+            .findById(id)
+            .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
+    return assetMapper.toAssetFromAssetEntity(
+        assetEntity, getLatestPriceAssetPort.getLatestPriceAsset(assetEntity.getIdentity()));
   }
 }
