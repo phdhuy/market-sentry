@@ -48,4 +48,10 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
             .orElseThrow(() -> new NotFoundException(MessageConstant.USER_NOT_FOUND));
     return userMapper.toUserDomain(userEntity);
   }
+
+  public UserEntity findUserEntityById(UUID userId) {
+    return userRepository
+        .findById(userId)
+        .orElseThrow(() -> new NotFoundException(MessageConstant.USER_NOT_FOUND));
+  }
 }
