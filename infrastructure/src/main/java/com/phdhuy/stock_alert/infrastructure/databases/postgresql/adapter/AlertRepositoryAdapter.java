@@ -13,6 +13,8 @@ import com.phdhuy.stock_alert.infrastructure.mapper.AlertMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -40,6 +42,15 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
     alertEntity.setUserEntity(userRepositoryAdapter.findUserEntityById(userId));
     alertEntity.setAssetEntity(assetRepositoryAdapter.findAssetEntityById(assetId));
 
-    return alertMapper.toAlertFromAlertEntity(alertRepository.save(alertEntity));
+    alertRepository.save(alertEntity);
+    return alertMapper.toAlertFromAlertEntity(alertEntity, alertEntity.getAssetEntity());
+  }
+
+  @Override
+  public Page<Alert> getMyAlert(Pageable pageable, UUID userId) {
+    Page<AlertEntity> alertEntities = alertRepository.getMyAlert(pageable, userId);
+    return alertEntities.map(
+        alertEntity ->
+            alertMapper.toAlertFromAlertEntity(alertEntity, alertEntity.getAssetEntity()));
   }
 }

@@ -3,6 +3,7 @@ package com.phdhuy.stock_alert.domain.alert.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import lombok.Builder;
 import lombok.Data;
 
@@ -28,4 +29,6 @@ public class Alert {
   private Timestamp expirationAt;
 
   private String alertStatus;
+
+  private Asset asset;
 }
