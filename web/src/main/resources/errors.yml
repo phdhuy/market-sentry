@@ -2,7 +2,7 @@
 internal_server_error:
   code: ERR.SER0101
   message: Internal server error!
-forbidden_error:
+forbidden:
   code: ERR.AUTH0101
   message: Access Denied You don’t have permission to access!
 unauthorized:
@@ -55,3 +55,8 @@ email_is_not_verified:
 asset_not_found:
   code: ERR.CRY0101
   message: Asset was not found!
+
+#Alert
+alert_not_found:
+  code: ERR.ALW0101
+  message: Alert was not found!

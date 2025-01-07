@@ -2,7 +2,7 @@ package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.AssetRepositoryPort;
-import com.phdhuy.stock_alert.domain.asset.ports.outbound.GetLatestPriceAssetPort;
+import com.phdhuy.stock_alert.infrastructure.databases.influxdb.adapter.PriceAssetRepositoryAdapter;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.AssetMapper;
@@ -24,7 +24,7 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
 
   private final AssetRepository assetRepository;
 
-  private final GetLatestPriceAssetPort getLatestPriceAssetPort;
+  private final PriceAssetRepositoryAdapter priceAssetRepositoryAdapter;
 
   private final AssetMapper assetMapper;
 
@@ -37,16 +37,16 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
   public Page<Asset> getAllAsset(Pageable pageable, String type, List<String> query) {
     boolean isAll = query.isEmpty();
     Page<AssetEntity> assetSummaries =
-        assetRepository.getAllAssetSummary(pageable, type, query, isAll);
+            assetRepository.getAllAssetSummary(pageable, type, query, isAll);
     List<String> symbols =
-        assetSummaries.getContent().stream().map(AssetEntity::getIdentity).toList();
+            assetSummaries.getContent().stream().map(AssetEntity::getIdentity).toList();
 
-    HashMap<String, Double> latestPrices = getLatestPriceAssetPort.getLatestPriceAssets(symbols);
+    HashMap<String, Double> latestPrices = priceAssetRepositoryAdapter.getLatestPriceAssets(symbols);
 
     List<Asset> assets =
-        assetSummaries.getContent().stream()
-            .map(summary -> mapToAsset(summary, latestPrices))
-            .toList();
+            assetSummaries.getContent().stream()
+                    .map(summary -> mapToAsset(summary, latestPrices))
+                    .toList();
 
     return new PageImpl<>(assets, pageable, assetSummaries.getTotalElements());
   }
@@ -63,7 +63,7 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
             .findById(id)
             .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
     return assetMapper.toAssetFromAssetEntity(
-        assetEntity, getLatestPriceAssetPort.getLatestPriceAsset(assetEntity.getIdentity()));
+        assetEntity, priceAssetRepositoryAdapter.getLatestPriceAsset(assetEntity.getIdentity()));
   }
 
   public AssetEntity findAssetEntityById(UUID id) {

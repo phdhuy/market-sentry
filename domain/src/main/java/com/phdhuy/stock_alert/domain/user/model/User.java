@@ -1,5 +1,6 @@
 package com.phdhuy.stock_alert.domain.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -19,6 +20,7 @@ public class User {
 
   private String email;
 
+  @JsonIgnore()
   private String password;
 
   private Role role;

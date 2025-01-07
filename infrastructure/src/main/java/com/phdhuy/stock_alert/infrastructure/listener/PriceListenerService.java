@@ -2,7 +2,7 @@ package com.phdhuy.stock_alert.infrastructure.listener;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.infrastructure.databases.influxdb.adapter.CreatePriceAssetAdapter;
+import com.phdhuy.stock_alert.infrastructure.databases.influxdb.adapter.PriceAssetRepositoryAdapter;
 import com.phdhuy.stock_alert.shared.handler.PriceWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PriceListenerService {
 
-  private final CreatePriceAssetAdapter createPriceAssetAdapter;
+  private final PriceAssetRepositoryAdapter priceAssetRepositoryAdapter;
 
   private final PriceWebSocketHandler priceWebSocketHandler;
 
@@ -31,7 +31,7 @@ public class PriceListenerService {
               entry -> {
                 String assetSymbol = entry.getKey();
                 double assetPrice = entry.getValue().asDouble();
-                createPriceAssetAdapter.createPriceAsset(assetSymbol, assetSymbol, assetPrice);
+                priceAssetRepositoryAdapter.createPriceAsset(assetSymbol, assetSymbol, assetPrice);
               });
     } catch (Exception e) {
       log.error("Error processing message:", e);

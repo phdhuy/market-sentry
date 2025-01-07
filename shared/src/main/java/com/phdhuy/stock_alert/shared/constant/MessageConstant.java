@@ -35,4 +35,7 @@ public class MessageConstant {
 
   // Asset
   public static final String ASSET_NOT_FOUND = "asset_not_found";
+
+  // Alert
+  public static final String ALERT_NOT_FOUND = "alert_not_found";
 }
