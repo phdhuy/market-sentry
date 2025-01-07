@@ -11,10 +11,13 @@ import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.T
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AlertRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.AlertMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 @PersistenceAdapter
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
   private final AlertMapper alertMapper;
 
   @Override
+  @Transactional
   public Alert createAlert(Alert alert, UUID userId, UUID assetId) {
     AlertEntity alertEntity = new AlertEntity();
 
@@ -43,14 +47,25 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
     alertEntity.setAssetEntity(assetRepositoryAdapter.findAssetEntityById(assetId));
 
     alertRepository.save(alertEntity);
-    return alertMapper.toAlertFromAlertEntity(alertEntity, alertEntity.getAssetEntity());
+    return alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity());
   }
 
   @Override
   public Page<Alert> getMyAlert(Pageable pageable, UUID userId) {
     Page<AlertEntity> alertEntities = alertRepository.getMyAlert(pageable, userId);
-    return alertEntities.map(
-        alertEntity ->
-            alertMapper.toAlertFromAlertEntity(alertEntity, alertEntity.getAssetEntity()));
+    return alertEntities.map(alertMapper::toAlert);
+  }
+
+  @Override
+  public Alert getDetailAlert(UUID alertId) {
+    AlertEntity alertEntity = this.findById(alertId);
+    return alertMapper.toAlert(
+        alertEntity, alertEntity.getAssetEntity(), alertEntity.getUserEntity());
+  }
+
+  public AlertEntity findById(UUID alertId) {
+    return alertRepository
+        .findById(alertId)
+        .orElseThrow(() -> new NotFoundException(MessageConstant.ALERT_NOT_FOUND));
   }
 }

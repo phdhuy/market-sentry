@@ -11,4 +11,6 @@ public interface AlertRepositoryPort {
   Alert createAlert(Alert alert, UUID userId, UUID assetId);
 
   Page<Alert> getMyAlert(Pageable pageable, UUID userId);
+
+  Alert getDetailAlert(UUID alertId);
 }

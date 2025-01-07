@@ -11,6 +11,7 @@ import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
 import com.phdhuy.stock_alert.shared.utils.PagingUtils;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/alerts")
+@RequestMapping("api/v1")
 @RequiredArgsConstructor
 @Tag(name = "Alert APIs")
 public class AlertController {
@@ -28,9 +29,10 @@ public class AlertController {
 
   private final AlertDTOMapper alertDTOMapper;
 
-  @PostMapping
+  @PostMapping("/assets/{assetId}/alerts")
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<ResponseDataAPI> createAlert(
+      @PathVariable UUID assetId,
       @RequestBody @Valid CreateAlertRequest createAlertRequest,
       @CurrentUser UserPrincipal userPrincipal) {
     return ResponseEntity.ok(
@@ -38,10 +40,10 @@ public class AlertController {
             alertUseCase.createAlert(
                 alertDTOMapper.toAlertFromAlertDTO(createAlertRequest),
                 userPrincipal.getId(),
-                createAlertRequest.getAssetId())));
+                assetId)));
   }
 
-  @GetMapping
+  @GetMapping("/alerts")
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<ResponseDataAPI> getMyAlert(
       @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy,
@@ -59,5 +61,14 @@ public class AlertController {
 
     return ResponseEntity.ok(
         ResponseDataAPI.success(alerts.getContent().stream().toList(), pageInfo));
+  }
+
+  @GetMapping("/alerts/{alertId}")
+  @PreAuthorize("hasRole('USER')")
+  public ResponseEntity<ResponseDataAPI> getDetailAlert(
+      @PathVariable UUID alertId, @CurrentUser UserPrincipal userPrincipal) {
+    return ResponseEntity.ok(
+        ResponseDataAPI.successWithoutMeta(
+            alertUseCase.getDetailAlert(alertId, userPrincipal.getId())));
   }
 }
