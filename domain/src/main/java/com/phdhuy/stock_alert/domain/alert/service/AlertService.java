@@ -32,9 +32,29 @@ public class AlertService implements AlertUseCase {
   public Alert getDetailAlert(UUID alertId, UUID userId) {
     Alert alert = alertRepositoryPort.getDetailAlert(alertId);
 
-    if(!alert.getUser().getId().equals(userId)) {
+    if(!alert.isOwner(userId)) {
       throw new ForbiddenException(MessageConstant.FORBIDDEN);
     }
     return alert;
+  }
+
+  @Override
+  public void deleteAlert(UUID alertId, UUID userId) {
+    Alert alert = alertRepositoryPort.getDetailAlert(alertId);
+
+    if(!alert.isOwner(userId)) {
+      throw new ForbiddenException(MessageConstant.FORBIDDEN);
+    }
+    alertRepositoryPort.deleteAlert(alert);
+  }
+
+  @Override
+  public Alert updateAlert(Alert alertUpdate, UUID alertId, UUID userId) {
+    Alert alert = alertRepositoryPort.getDetailAlert(alertId);
+
+    if(!alert.isOwner(userId)) {
+      throw new ForbiddenException(MessageConstant.FORBIDDEN);
+    }
+    return alertRepositoryPort.updateAlert(alert, alertUpdate);
   }
 }

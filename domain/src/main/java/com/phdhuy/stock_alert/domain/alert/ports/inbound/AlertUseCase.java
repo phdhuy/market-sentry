@@ -13,4 +13,8 @@ public interface AlertUseCase {
   Page<Alert> getMyAlert(Pageable pageable, UUID userId);
 
   Alert getDetailAlert(UUID alertId, UUID userId);
+
+  void deleteAlert(UUID alertId, UUID userId);
+
+  Alert updateAlert(Alert alertUpdate, UUID alertId, UUID userId);
 }

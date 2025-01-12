@@ -11,6 +11,7 @@ import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.T
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AlertRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.AlertMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
+import com.phdhuy.stock_alert.shared.common.CommonFunction;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import java.util.UUID;
@@ -36,13 +37,8 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
   public Alert createAlert(Alert alert, UUID userId, UUID assetId) {
     AlertEntity alertEntity = new AlertEntity();
 
-    alertEntity.setAlertType(AlertType.valueOf(alert.getAlertType()));
-    alertEntity.setAlertConditionType(AlertConditionType.valueOf(alert.getAlertConditionType()));
+    this.save(alert, alertEntity);
     alertEntity.setAlertStatus(AlertStatus.ACTIVE);
-    alertEntity.setValue(alert.getValue());
-    alertEntity.setTriggerType(TriggerType.valueOf(alert.getTriggerType()));
-    alertEntity.setExpirationAt(alert.getExpirationAt());
-
     alertEntity.setUserEntity(userRepositoryAdapter.findUserEntityById(userId));
     alertEntity.setAssetEntity(assetRepositoryAdapter.findAssetEntityById(assetId));
 
@@ -61,6 +57,31 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
     AlertEntity alertEntity = this.findById(alertId);
     return alertMapper.toAlert(
         alertEntity, alertEntity.getAssetEntity(), alertEntity.getUserEntity());
+  }
+
+  @Override
+  public void deleteAlert(Alert alert) {
+    AlertEntity alertEntity = this.findById(alert.getId());
+    alertEntity.setDeletedAt(CommonFunction.getCurrentDateTime());
+    alertRepository.save(alertEntity);
+  }
+
+  @Override
+  public Alert updateAlert(Alert alert, Alert alertUpdate) {
+    AlertEntity alertEntity = this.findById(alert.getId());
+
+    this.save(alertUpdate, alertEntity);
+
+    alertRepository.save(alertEntity);
+    return alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity());
+  }
+
+  private void save(Alert alert, AlertEntity alertEntity) {
+    alertEntity.setAlertType(AlertType.valueOf(alert.getAlertType()));
+    alertEntity.setAlertConditionType(AlertConditionType.valueOf(alert.getAlertConditionType()));
+    alertEntity.setValue(alert.getValue());
+    alertEntity.setTriggerType(TriggerType.valueOf(alert.getTriggerType()));
+    alertEntity.setExpirationAt(alert.getExpirationAt());
   }
 
   public AlertEntity findById(UUID alertId) {

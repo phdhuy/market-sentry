@@ -6,12 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.sql.Timestamp;
 import java.util.UUID;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserInfoResponse {
