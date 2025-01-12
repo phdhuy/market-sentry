@@ -1,21 +1,20 @@
-package com.phdhuy.stock_alert.domain.alert.model;
+package com.phdhuy.stock_alert.application.dto.response.alert;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.phdhuy.stock_alert.domain.asset.model.Asset;
-import com.phdhuy.stock_alert.domain.user.model.User;
-import lombok.Builder;
-import lombok.Data;
-
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@Data
-@Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
+import com.phdhuy.stock_alert.application.dto.response.asset.AssetInfoResponse;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class Alert {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class AlertInfoResponse {
 
   private UUID id;
 
@@ -35,11 +34,5 @@ public class Alert {
 
   private String alertStatus;
 
-  private Asset asset;
-
-  private User user;
-
-  public boolean isOwner(UUID userId) {
-    return this.user != null && this.user.getId().equals(userId);
-  }
+  private AssetInfoResponse asset;
 }

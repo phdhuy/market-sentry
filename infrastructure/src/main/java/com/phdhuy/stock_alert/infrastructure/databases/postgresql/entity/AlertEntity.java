@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 @Builder
 @Getter
@@ -16,6 +17,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "alert")
+@SQLRestriction("deleted_at is NULL")
 public class AlertEntity extends BaseEntity {
 
   @Id @GeneratedValue private UUID id;

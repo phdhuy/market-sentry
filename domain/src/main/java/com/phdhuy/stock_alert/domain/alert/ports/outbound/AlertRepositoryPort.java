@@ -13,4 +13,8 @@ public interface AlertRepositoryPort {
   Page<Alert> getMyAlert(Pageable pageable, UUID userId);
 
   Alert getDetailAlert(UUID alertId);
+
+  void deleteAlert(Alert alert);
+
+  Alert updateAlert(Alert alert, Alert alertUpdate);
 }
