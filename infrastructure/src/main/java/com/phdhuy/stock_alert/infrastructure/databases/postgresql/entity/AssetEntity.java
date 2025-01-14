@@ -18,29 +18,11 @@ public class AssetEntity extends BaseEntity {
 
   @Column private String identity;
 
-  @Column private Long rank;
-
   @Column private String symbol;
 
   @Column private String name;
 
-  @Column private Double supply;
-
-  @Column private Double maxSupply;
-
-  @Column private Double marketCapUsd;
-
-  @Column private Double volumeUsd24Hr;
-
-  @Column private Double changePercent24Hr;
-
-  @Column private Double vwap24Hr;
-
   @Column private String explorer;
-
-  @Column private String floor;
-
-  @Column private String nameVn;
 
   @Column
   @Enumerated(EnumType.STRING)

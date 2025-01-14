@@ -43,8 +43,6 @@ public class InfoStockAdapter {
         .identity(getSafeText(stockNode, "code"))
         .symbol(getSafeText(stockNode, "code"))
         .name(getSafeText(stockNode, "companyNameEng"))
-        .nameVn(getSafeText(stockNode, "companyName"))
-        .floor(getSafeText(stockNode, "floor"))
         .logo(CommonConstant.IMAGE_STOCK_VN + getSafeText(stockNode, "code"))
         .assetType(String.valueOf(AssetType.STOCK))
         .build();

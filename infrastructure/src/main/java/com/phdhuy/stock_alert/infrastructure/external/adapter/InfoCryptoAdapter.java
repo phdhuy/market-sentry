@@ -47,15 +47,8 @@ public class InfoCryptoAdapter {
   private Asset convertToAsset(JsonNode cryptoNode) {
     return Asset.builder()
         .identity(cryptoNode.get("id").asText())
-        .rank(cryptoNode.get("rank").asLong())
         .symbol(cryptoNode.get("symbol").asText())
         .name(cryptoNode.get("name").asText())
-        .supply(cryptoNode.get("supply").asDouble())
-        .maxSupply(cryptoNode.get("maxSupply").asDouble())
-        .marketCapUsd(cryptoNode.get("marketCapUsd").asDouble())
-        .volumeUsd24Hr(cryptoNode.get("volumeUsd24Hr").asDouble())
-        .changePercent24Hr(cryptoNode.get("changePercent24Hr").asDouble())
-        .vwap24Hr(cryptoNode.get("vwap24Hr").asDouble())
         .explorer(cryptoNode.get("explorer").asText())
         .assetType(String.valueOf(AssetType.CRYPTO))
         .build();
