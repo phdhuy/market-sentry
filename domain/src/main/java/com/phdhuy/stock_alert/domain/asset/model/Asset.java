@@ -18,31 +18,13 @@ public class Asset {
 
   private String identity;
 
-  private Long rank;
-
   private String symbol;
 
   private String name;
 
-  private Double supply;
-
-  private Double maxSupply;
-
-  private Double marketCapUsd;
-
-  private Double volumeUsd24Hr;
-
-  private Double changePercent24Hr;
-
-  private Double vwap24Hr;
-
   private String explorer;
 
   private Double currentPriceUsd;
-
-  private String floor;
-
-  private String nameVn;
 
   private String assetType;
 

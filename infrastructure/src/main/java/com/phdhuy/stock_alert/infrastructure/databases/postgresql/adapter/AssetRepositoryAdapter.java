@@ -1,9 +1,10 @@
-package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset;
+package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.asset.ports.outbound.AssetRepositoryPort;
 import com.phdhuy.stock_alert.infrastructure.databases.influxdb.adapter.PriceAssetRepositoryAdapter;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AssetEntity;
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AssetType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AssetRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.AssetMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
@@ -66,9 +67,36 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
         assetEntity, priceAssetRepositoryAdapter.getLatestPriceAsset(assetEntity.getIdentity()));
   }
 
+  public void createAsset(Asset asset) {
+    AssetEntity assetEntity = new AssetEntity();
+
+    this.toAssetEntity(asset, assetEntity);
+  }
+
+  public void updateAsset(Asset asset) {
+    AssetEntity assetEntity = this.findAssetEntityByIdentity(asset.getIdentity());
+
+    this.toAssetEntity(asset, assetEntity);
+  }
+
+  private void toAssetEntity(Asset asset, AssetEntity assetEntity) {
+    assetEntity.setIdentity(asset.getIdentity());
+    assetEntity.setSymbol(asset.getSymbol());
+    assetEntity.setName(asset.getName());
+    assetEntity.setExplorer(asset.getExplorer());
+    assetEntity.setAssetType(AssetType.valueOf(asset.getAssetType()));
+    assetRepository.save(assetEntity);
+  }
+
   public AssetEntity findAssetEntityById(UUID id) {
     return assetRepository
         .findById(id)
         .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
+  }
+
+  public AssetEntity findAssetEntityByIdentity(String identity) {
+    return assetRepository
+            .findByIdentity(identity)
+            .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
   }
 }

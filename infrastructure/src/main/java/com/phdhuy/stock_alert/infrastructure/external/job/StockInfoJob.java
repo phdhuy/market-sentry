@@ -1,8 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.external.job;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset.AssetRepositoryAdapter;
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.asset.CreateAssetAdapter;
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.AssetRepositoryAdapter;
 import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoStockAdapter;
 import java.io.IOException;
 import java.util.List;
@@ -16,8 +15,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class StockInfoJob {
 
-  private final CreateAssetAdapter createAssetAdapter;
-
   private final InfoStockAdapter infoStockAdapter;
 
   private final AssetRepositoryAdapter assetRepositoryAdapter;
@@ -27,9 +24,9 @@ public class StockInfoJob {
     List<Asset> assetList = infoStockAdapter.crawlDataStock();
     for (Asset asset : assetList) {
       if (assetRepositoryAdapter.existsByIdentity(asset.getIdentity())) {
-        createAssetAdapter.updateStock(asset);
+        assetRepositoryAdapter.updateAsset(asset);
       } else {
-        createAssetAdapter.createStock(asset);
+        assetRepositoryAdapter.createAsset(asset);
       }
     }
   }
