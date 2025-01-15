@@ -11,4 +11,8 @@ public interface AssetMapper {
 
   @Mapping(source = "latestPrice", target = "currentPriceUsd")
   Asset toAssetFromAssetEntity(AssetEntity assetEntity, Double latestPrice);
+
+  AssetEntity toAssetEntity(Asset asset);
+
+  Asset toAsset(AssetEntity assetEntity);
 }

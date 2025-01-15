@@ -3,7 +3,7 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
+import com.phdhuy.stock_alert.infrastructure.messagebroker.adapter.RabbitMQAdapter;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class PriceCryptoAdapter {
 
-  private final RabbitMQPort rabbitMQPort;
+  private final RabbitMQAdapter rabbitMQAdapter;
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -68,7 +68,7 @@ public class PriceCryptoAdapter {
                 () -> {
                   try {
                     JsonNode node = objectMapper.readTree(message);
-                    rabbitMQPort.sendMessage(node.toString());
+                    rabbitMQAdapter.sendMessage(node.toString());
                   } catch (JsonProcessingException e) {
                     log.error("Error parsing JSON message:", e);
                   }
