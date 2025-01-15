@@ -13,4 +13,8 @@ public interface AssetRepositoryPort {
   Page<Asset> getAllAsset(Pageable pageable, String type, List<String> query);
 
   Asset getDetailAsset(UUID id);
+
+  Asset createAsset(Asset asset);
+
+  Asset updateAsset(Asset asset);
 }

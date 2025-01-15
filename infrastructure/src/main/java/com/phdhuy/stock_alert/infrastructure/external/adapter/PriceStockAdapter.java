@@ -2,7 +2,7 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.domain.messagebroker.RabbitMQPort;
+import com.phdhuy.stock_alert.infrastructure.messagebroker.adapter.RabbitMQAdapter;
 import com.phdhuy.stock_alert.shared.config.WebDriverConfig;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import java.time.*;
@@ -23,7 +23,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 @RequiredArgsConstructor
 public class PriceStockAdapter extends TextWebSocketHandler {
 
-  private final RabbitMQPort rabbitMQPort;
+  private final RabbitMQAdapter rabbitMQAdapter;
 
   private final WebDriverConfig webDriverConfig;
 
@@ -140,7 +140,7 @@ public class PriceStockAdapter extends TextWebSocketHandler {
   private void sendToRabbitMQ(Map<String, String> priceMap) throws JsonProcessingException {
     ObjectMapper objectMapper = new ObjectMapper();
     String jsonString = objectMapper.writeValueAsString(priceMap);
-    rabbitMQPort.sendMessage(jsonString);
+    rabbitMQAdapter.sendMessage(jsonString);
   }
 
   private void waitUntilNextMarketOpen(ZoneId zoneId, LocalTime marketOpen)
