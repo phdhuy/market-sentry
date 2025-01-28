@@ -5,9 +5,6 @@ import com.phdhuy.stock_alert.domain.alert.ports.inbound.AlertUseCase;
 import com.phdhuy.stock_alert.domain.alert.ports.outbound.AlertRepositoryPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import java.util.UUID;
-
-import com.phdhuy.stock_alert.shared.constant.MessageConstant;
-import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,9 +29,7 @@ public class AlertService implements AlertUseCase {
   public Alert getDetailAlert(UUID alertId, UUID userId) {
     Alert alert = alertRepositoryPort.getDetailAlert(alertId);
 
-    if(!alert.isOwner(userId)) {
-      throw new ForbiddenException(MessageConstant.FORBIDDEN);
-    }
+    alert.isOwner(userId);
     return alert;
   }
 
@@ -42,9 +37,7 @@ public class AlertService implements AlertUseCase {
   public void deleteAlert(UUID alertId, UUID userId) {
     Alert alert = alertRepositoryPort.getDetailAlert(alertId);
 
-    if(!alert.isOwner(userId)) {
-      throw new ForbiddenException(MessageConstant.FORBIDDEN);
-    }
+    alert.isOwner(userId);
     alertRepositoryPort.deleteAlert(alert);
   }
 
@@ -52,9 +45,7 @@ public class AlertService implements AlertUseCase {
   public Alert updateAlert(Alert alertUpdate, UUID alertId, UUID userId) {
     Alert alert = alertRepositoryPort.getDetailAlert(alertId);
 
-    if(!alert.isOwner(userId)) {
-      throw new ForbiddenException(MessageConstant.FORBIDDEN);
-    }
+    alert.isOwner(userId);
     return alertRepositoryPort.updateAlert(alert, alertUpdate);
   }
 }

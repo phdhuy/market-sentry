@@ -1,4 +1,4 @@
-package com.phdhuy.stock_alert.shared.config;
+package com.phdhuy.stock_alert.infrastructure.external.messagebroker;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -28,16 +28,26 @@ public class RabbitMQConfig implements WebSocketMessageBrokerConfigurer {
 
   @Bean
   public FanoutExchange fanoutExchange() {
-    return new FanoutExchange("websocket.fanout.exchange");
+    return new FanoutExchange("price_asset.fanout.exchange");
   }
 
   @Bean
-  public Queue queue1() {
-    return new Queue("price");
+  public Queue priceWebsocket() {
+    return new Queue("price_websocket");
   }
 
   @Bean
-  public Binding binding1(Queue queue1, FanoutExchange fanoutExchange) {
-    return BindingBuilder.bind(queue1).to(fanoutExchange);
+  public Queue priceFlink() {
+    return new Queue("price_flink");
+  }
+
+  @Bean
+  public Binding binding1(Queue priceWebsocket, FanoutExchange fanoutExchange) {
+    return BindingBuilder.bind(priceWebsocket).to(fanoutExchange);
+  }
+
+  @Bean
+  public Binding binding2(Queue priceFlink, FanoutExchange fanoutExchange) {
+    return BindingBuilder.bind(priceFlink).to(fanoutExchange);
   }
 }

@@ -13,10 +13,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.util.Collector;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -93,29 +89,6 @@ public class AlertController {
   public ResponseEntity<ResponseDataAPI> deleteAlert(
       @PathVariable UUID alertId, @CurrentUser UserPrincipal userPrincipal) {
     alertUseCase.deleteAlert(alertId, userPrincipal.getId());
-    return ResponseEntity.ok(ResponseDataAPI.successWithoutMetaAndData());
-  }
-
-  @GetMapping("/test-flink")
-  public ResponseEntity<ResponseDataAPI> testFlink() throws Exception {
-    final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-
-    // Define a simple Flink job (e.g., a word count)
-    env.fromElements("Apache Flink is awesome", "Spring Boot integration")
-        .flatMap(
-            (String line, Collector<String> out) -> {
-              for (String word : line.split("\\s+")) {
-                out.collect(word);
-              }
-            })
-        .returns(Types.STRING)
-        .map(word -> Tuple2.of(word, 1))
-        .returns(Types.TUPLE(Types.STRING, Types.INT))
-        .keyBy(tuple -> tuple.f0)
-        .sum(1)
-        .print();
-
-    env.execute("Flink Job in Spring Boot");
     return ResponseEntity.ok(ResponseDataAPI.successWithoutMetaAndData());
   }
 }

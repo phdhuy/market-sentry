@@ -48,4 +48,4 @@ COPY --from=build /usr/src/app/web/target/web-0.0.1-SNAPSHOT.jar /usr/app
 
 EXPOSE 8081
 
-CMD ["java", "-jar", "--add-opens=java.base/java.lang=ALL-UNNAMED", "web-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "--add-opens=java.base/java.lang=ALL-UNNAMED", "--add-opens=java.base/java.util=ALL-UNNAMED", "web-0.0.1-SNAPSHOT.jar"]

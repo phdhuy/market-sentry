@@ -13,6 +13,7 @@ import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import com.phdhuy.stock_alert.shared.common.CommonFunction;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.NotFoundException;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -73,6 +74,17 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
 
     alertRepository.save(alertEntity);
     return alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity());
+  }
+
+  @Override
+  public List<Alert> getListAlertActive() {
+    List<AlertEntity> alertEntities = alertRepository.getAlertActive();
+    return alertEntities.stream()
+        .map(
+            alertEntity ->
+                alertMapper.toAlert(
+                    alertEntity, alertEntity.getAssetEntity(), alertEntity.getUserEntity()))
+        .toList();
   }
 
   private void save(Alert alert, AlertEntity alertEntity) {
