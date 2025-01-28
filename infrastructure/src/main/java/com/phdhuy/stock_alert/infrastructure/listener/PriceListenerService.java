@@ -20,7 +20,7 @@ public class PriceListenerService {
 
   private final ObjectMapper objectMapper;
 
-  @RabbitListener(queues = "price")
+  @RabbitListener(queues = "price_websocket")
   public void receiveMessage(String message) {
     try {
       JsonNode rootNode = objectMapper.readTree(message);

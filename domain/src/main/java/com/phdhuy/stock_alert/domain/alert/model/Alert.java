@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.user.model.User;
-import lombok.Builder;
-import lombok.Data;
-
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
 import java.sql.Timestamp;
 import java.util.UUID;
+import lombok.Builder;
+import lombok.Data;
 
 @Data
 @Builder
@@ -39,7 +40,9 @@ public class Alert {
 
   private User user;
 
-  public boolean isOwner(UUID userId) {
-    return this.user != null && this.user.getId().equals(userId);
+  public void isOwner(UUID userId) {
+    if (this.user == null || !this.user.getId().equals(userId)) {
+      throw new ForbiddenException(MessageConstant.FORBIDDEN);
+    }
   }
 }

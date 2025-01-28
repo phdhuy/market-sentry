@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class PriceAsset {
 
+  private String symbol;
+
   private Double price;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")

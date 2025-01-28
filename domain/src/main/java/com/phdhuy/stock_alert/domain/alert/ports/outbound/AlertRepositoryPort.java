@@ -4,6 +4,7 @@ import com.phdhuy.stock_alert.domain.alert.model.Alert;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface AlertRepositoryPort {
@@ -17,4 +18,6 @@ public interface AlertRepositoryPort {
   void deleteAlert(Alert alert);
 
   Alert updateAlert(Alert alert, Alert alertUpdate);
+
+  List<Alert> getListAlertActive();
 }

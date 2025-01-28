@@ -3,7 +3,7 @@ package com.phdhuy.stock_alert.infrastructure.external.adapter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.phdhuy.stock_alert.infrastructure.messagebroker.adapter.RabbitMQAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.messagebroker.RabbitMQAdapter;
 import com.phdhuy.stock_alert.shared.constant.CommonConstant;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;

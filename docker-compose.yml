@@ -13,13 +13,19 @@ services:
       POSTGRES_PASSWORD: duchuy
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - stock-alert-network
 
   rabbitmq:
-    image: "rabbitmq:latest"
+    image: "rabbitmq:management"
     container_name: rabbitmq-stock-alert
     ports:
       - "5672:5672"
       - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/data
+    networks:
+      - stock-alert-network
 
   influxdb:
     image: influxdb:latest
@@ -32,12 +38,15 @@ services:
       INFLUXDB_ADMIN_PASSWORD: duchuy1311
     volumes:
       - influxdb-data:/var/lib/influxdb2
+    networks:
+      - stock-alert-network
 
   flink-jobmanager:
     image: flink:latest
     container_name: flink-jobmanager
     ports:
-      - "8082:8081" # JobManager REST API
+      - "8082:8081"
+      - "6123:6123"
     environment:
       - TASK_MANAGER_HEAP_SIZE=1024m
       - JOB_MANAGER_HEAP_SIZE=1024m
@@ -48,6 +57,8 @@ services:
     depends_on:
       - rabbitmq
       - influxdb
+    networks:
+      - stock-alert-network
 
   flink-taskmanager:
     image: flink:latest
@@ -60,6 +71,10 @@ services:
     command: taskmanager
     volumes:
       - flink-job:/opt/flink/usrlib
+    links:
+      - flink-jobmanager
+    networks:
+      - stock-alert-network
 
   backend:
     build:
@@ -91,8 +106,15 @@ services:
       - rabbitmq
       - influxdb
       - flink-jobmanager
+    networks:
+      - stock-alert-network
 
 volumes:
   postgres-data:
   influxdb-data:
+  rabbitmq-data:
   flink-job:
+
+networks:
+  stock-alert-network:
+    driver: bridge
