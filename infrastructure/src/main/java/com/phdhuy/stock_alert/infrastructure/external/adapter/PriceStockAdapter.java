@@ -55,28 +55,23 @@ public class PriceStockAdapter {
     DayOfWeek dayOfWeek = today.getDayOfWeek();
 
     if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-      log.info("Market closed on weekends.");
       return;
     }
 
     LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
 
     if (currentTime.isAfter(marketClose)) {
-      log.info("Market closed for today.");
       return;
     }
 
     if ((currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen))) {
-      log.info("Market is in break time.");
       return;
     }
 
     if (currentTime.isBefore(marketOpen)) {
-      log.info("Waiting for market to open...");
       return;
     }
 
-    log.info("Fetching stock prices...");
     WebDriver webDriver = webDriverConfig.getWebDriver();
     try {
       webDriver.get(CommonConstant.PRICE_STOCK);

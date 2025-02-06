@@ -1,5 +1,6 @@
 package com.phdhuy.stock_alert.infrastructure.external.flink.job;
 
+import com.phdhuy.stock_alert.domain.alert.model.Alert;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
 import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AssetPriceDataSource;
 import com.phdhuy.stock_alert.infrastructure.external.flink.function.AlertTriggerFunction;
@@ -34,7 +35,7 @@ public class AssetPriceAlertJob {
       DataStream<String> assetPriceStream = assetPriceDataSource.getAssetPriceSource(env);
 
       DataStream<AssetPrice> coinPriceStream = assetPriceStream.map(jsonToCoinPriceMapper);
-      DataStream<String> alertsStream = coinPriceStream.flatMap(alertTriggerFunction);
+      DataStream<Alert> alertsStream = coinPriceStream.flatMap(alertTriggerFunction);
       alertsStream.addSink(alertSink);
 
       env.execute("Asset Price Alert Job");
