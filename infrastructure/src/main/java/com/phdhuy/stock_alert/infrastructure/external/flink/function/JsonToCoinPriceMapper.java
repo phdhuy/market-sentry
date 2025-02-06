@@ -17,7 +17,6 @@ public class JsonToCoinPriceMapper implements MapFunction<String, AssetPrice> {
 
   @Override
   public AssetPrice map(String json) {
-    log.info("Received JsonToCoinPriceMapper: {}", json);
     try {
       JsonNode rawNode = objectMapper.readTree(json);
 

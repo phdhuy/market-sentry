@@ -1,45 +1,58 @@
 package com.phdhuy.stock_alert.infrastructure.external.flink.function;
 
+import com.phdhuy.stock_alert.domain.alert.model.Alert;
+import com.phdhuy.stock_alert.domain.alert.ports.outbound.AlertRepositoryPort;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
 import java.util.List;
 import java.util.Map;
 
-import com.phdhuy.stock_alert.infrastructure.external.flink.model.UserAlert;
-import org.apache.flink.api.common.functions.FlatMapFunction;
+import com.phdhuy.stock_alert.shared.utils.SpringContext;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.common.functions.RichFlatMapFunction;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.util.Collector;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AlertTriggerFunction implements FlatMapFunction<AssetPrice, String> {
+@Slf4j
+public class AlertTriggerFunction extends RichFlatMapFunction<AssetPrice, Alert> {
+
+  private transient AlertRepositoryPort alertRepositoryPort;
+
   @Override
-  public void flatMap(AssetPrice price, Collector<String> out) {
+  public void open(Configuration parameters) {
+    this.alertRepositoryPort = SpringContext.getBean(AlertRepositoryPort.class);
+  }
+
+  @Override
+  public void flatMap(AssetPrice price, Collector<Alert> out) {
     Map<String, Double> prices = price.getPricesAsMap();
 
     if (prices.isEmpty()) {
       return;
     }
 
-    List<UserAlert> userAlerts =
-            List.of(new UserAlert("bitcoin", 100456, "above"), new UserAlert("proton", 0.005, "below"));
+    List<Alert> userAlerts = alertRepositoryPort.getListAlertActive();
 
-    for (UserAlert alert : userAlerts) {
-      String coin = alert.getCoin();
+    for (Alert alert : userAlerts) {
+      String identity = alert.getAsset().getIdentity();
 
-      if (prices.containsKey(coin)) {
-        double coinPrice = prices.get(coin);
-        double threshold = alert.getThreshold();
-        String condition = alert.getCondition();
+      if (prices.containsKey(identity)) {
+        double coinPrice = prices.get(identity);
+        double threshold = alert.getValue();
+        String alertConditionType = alert.getAlertConditionType();
 
         boolean alertTriggered =
-                ("above".equals(condition) && coinPrice > threshold)
-                        || ("below".equals(condition) && coinPrice < threshold);
+                ("GREATER_THAN".equals(alertConditionType) && coinPrice > threshold)
+                        || ("LESS_THAN".equals(alertConditionType) && coinPrice < threshold);
 
         if (alertTriggered) {
           String notification =
                   String.format(
                           "Alert: %s price is now %.2f, crossing %s %.2f",
-                          coin, coinPrice, condition, threshold);
-          out.collect(notification);
+                          identity, coinPrice, alertConditionType, threshold);
+          log.info(notification);
+          out.collect(alert);
         }
       }
     }
