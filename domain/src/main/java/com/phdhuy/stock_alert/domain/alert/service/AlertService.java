@@ -1,8 +1,8 @@
 package com.phdhuy.stock_alert.domain.alert.service;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.domain.alert.ports.inbound.AlertUseCase;
-import com.phdhuy.stock_alert.domain.alert.ports.outbound.AlertRepositoryPort;
+import com.phdhuy.stock_alert.domain.alert.port.inbound.AlertUseCase;
+import com.phdhuy.stock_alert.domain.alert.port.outbound.AlertRepositoryPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

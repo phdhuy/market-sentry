@@ -5,7 +5,7 @@ import com.phdhuy.stock_alert.application.dto.request.auth.SignInRequest;
 import com.phdhuy.stock_alert.application.dto.request.auth.SignUpRequest;
 import com.phdhuy.stock_alert.application.mapper.UserDTOMapper;
 import com.phdhuy.stock_alert.domain.user.model.User;
-import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
+import com.phdhuy.stock_alert.domain.user.port.inbound.CreateUserUseCase;
 import com.phdhuy.stock_alert.infrastructure.security.adapters.TokenUtilsAdapter;
 import com.phdhuy.stock_alert.infrastructure.security.domain.UserPrincipal;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;

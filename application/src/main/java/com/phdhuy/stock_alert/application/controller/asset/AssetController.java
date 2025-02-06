@@ -1,8 +1,8 @@
 package com.phdhuy.stock_alert.application.controller.asset;
 
-import com.phdhuy.stock_alert.domain.asset.ports.inbound.GetAllAssetUseCase;
-import com.phdhuy.stock_alert.domain.asset.ports.inbound.GetDetailAssetUseCase;
-import com.phdhuy.stock_alert.domain.asset.ports.inbound.GetPriceHistoryAssetUseCase;
+import com.phdhuy.stock_alert.domain.asset.port.inbound.GetAllAssetUseCase;
+import com.phdhuy.stock_alert.domain.asset.port.inbound.GetDetailAssetUseCase;
+import com.phdhuy.stock_alert.domain.asset.port.inbound.GetPriceHistoryAssetUseCase;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
 import com.phdhuy.stock_alert.shared.utils.PagingUtils;
 import io.swagger.v3.oas.annotations.Parameter;

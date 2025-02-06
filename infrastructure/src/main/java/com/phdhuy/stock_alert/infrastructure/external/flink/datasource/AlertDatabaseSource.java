@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.external.flink.datasource;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.domain.alert.ports.outbound.AlertRepositoryPort;
+import com.phdhuy.stock_alert.domain.alert.port.outbound.AlertRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.apache.flink.streaming.api.functions.source.RichSourceFunction;
 import org.springframework.stereotype.Component;

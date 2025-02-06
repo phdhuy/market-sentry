@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.external.flink.function;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.domain.alert.ports.outbound.AlertRepositoryPort;
+import com.phdhuy.stock_alert.domain.alert.port.outbound.AlertRepositoryPort;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
 import java.util.List;
 import java.util.Map;

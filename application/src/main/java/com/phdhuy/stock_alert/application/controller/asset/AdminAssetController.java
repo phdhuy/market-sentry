@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.application.controller.asset;
 
-import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoCryptoAdapter;
-import com.phdhuy.stock_alert.infrastructure.external.adapter.InfoStockAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.crawl.InfoCryptoAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.crawl.InfoStockAdapter;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
