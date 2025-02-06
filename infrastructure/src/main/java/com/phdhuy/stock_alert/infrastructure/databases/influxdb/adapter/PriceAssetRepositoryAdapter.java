@@ -6,7 +6,7 @@ import com.influxdb.query.FluxRecord;
 import com.influxdb.query.FluxTable;
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
-import com.phdhuy.stock_alert.domain.asset.ports.outbound.PriceAssetRepositoryPort;
+import com.phdhuy.stock_alert.domain.asset.port.outbound.PriceAssetRepositoryPort;
 import com.phdhuy.stock_alert.infrastructure.databases.influxdb.entity.PriceAssetEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.influxdb.repository.PriceAssetRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.PriceAssetMapper;

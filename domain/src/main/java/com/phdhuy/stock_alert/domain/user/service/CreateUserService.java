@@ -1,8 +1,8 @@
 package com.phdhuy.stock_alert.domain.user.service;
 
 import com.phdhuy.stock_alert.domain.user.model.User;
-import com.phdhuy.stock_alert.domain.user.ports.inbound.CreateUserUseCase;
-import com.phdhuy.stock_alert.domain.user.ports.outbound.UserRepositoryPort;
+import com.phdhuy.stock_alert.domain.user.port.inbound.CreateUserUseCase;
+import com.phdhuy.stock_alert.domain.user.port.outbound.UserRepositoryPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.BadRequestException;

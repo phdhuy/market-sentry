@@ -2,8 +2,8 @@ package com.phdhuy.stock_alert.domain.asset.service;
 
 import com.phdhuy.stock_alert.domain.asset.model.Asset;
 import com.phdhuy.stock_alert.domain.asset.model.PriceAsset;
-import com.phdhuy.stock_alert.domain.asset.ports.inbound.GetPriceHistoryAssetUseCase;
-import com.phdhuy.stock_alert.domain.asset.ports.outbound.PriceAssetRepositoryPort;
+import com.phdhuy.stock_alert.domain.asset.port.inbound.GetPriceHistoryAssetUseCase;
+import com.phdhuy.stock_alert.domain.asset.port.outbound.PriceAssetRepositoryPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import java.util.List;
 import java.util.UUID;

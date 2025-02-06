@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.domain.alert.ports.outbound.AlertRepositoryPort;
+import com.phdhuy.stock_alert.domain.alert.port.outbound.AlertRepositoryPort;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.AlertEntity;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertConditionType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertStatus;

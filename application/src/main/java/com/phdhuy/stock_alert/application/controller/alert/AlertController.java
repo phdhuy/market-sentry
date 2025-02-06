@@ -3,7 +3,7 @@ package com.phdhuy.stock_alert.application.controller.alert;
 import com.phdhuy.stock_alert.application.dto.request.alert.CreateAlertRequest;
 import com.phdhuy.stock_alert.application.mapper.AlertDTOMapper;
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.domain.alert.ports.inbound.AlertUseCase;
+import com.phdhuy.stock_alert.domain.alert.port.inbound.AlertUseCase;
 import com.phdhuy.stock_alert.infrastructure.security.domain.UserPrincipal;
 import com.phdhuy.stock_alert.shared.annotation.CurrentUser;
 import com.phdhuy.stock_alert.shared.payload.general.PageInfo;

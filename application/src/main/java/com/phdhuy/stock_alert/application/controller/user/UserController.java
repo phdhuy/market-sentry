@@ -2,7 +2,7 @@ package com.phdhuy.stock_alert.application.controller.user;
 
 import com.phdhuy.stock_alert.application.mapper.UserDTOMapper;
 import com.phdhuy.stock_alert.domain.user.model.User;
-import com.phdhuy.stock_alert.domain.user.ports.inbound.FindUserByIdUseCase;
+import com.phdhuy.stock_alert.domain.user.port.inbound.FindUserByIdUseCase;
 import com.phdhuy.stock_alert.infrastructure.security.domain.UserPrincipal;
 import com.phdhuy.stock_alert.shared.annotation.CurrentUser;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
