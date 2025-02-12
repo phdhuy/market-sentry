@@ -68,6 +68,8 @@ public class NotificationController {
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<ResponseDataAPI> getDetailNotification(
       @PathVariable UUID notificationId, @CurrentUser UserPrincipal userPrincipal) {
-    return ResponseEntity.ok(ResponseDataAPI.successWithoutMetaAndData());
+    return ResponseEntity.ok(
+        ResponseDataAPI.successWithoutMeta(
+            notificationUseCase.getDetailNotification(notificationId, userPrincipal.getId())));
   }
 }

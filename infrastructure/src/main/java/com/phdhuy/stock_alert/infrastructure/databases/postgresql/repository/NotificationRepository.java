@@ -1,6 +1,8 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository;
 
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.NotificationEntity;
+
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,4 +31,8 @@ public interface NotificationRepository extends JpaRepository<NotificationEntity
 
   @Query(value = "select * from notification n where n.user_id = :userId", nativeQuery = true)
   Page<NotificationEntity> getMyNotification(Pageable pageable, UUID userId);
+
+  @Override
+  @Query(value = "SELECT n FROM NotificationEntity n JOIN FETCH n.alertEntity WHERE n.id = :notificationId")
+  Optional<NotificationEntity> findById(UUID notificationId);
 }

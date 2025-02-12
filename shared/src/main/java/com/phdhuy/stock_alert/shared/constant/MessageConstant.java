@@ -38,4 +38,7 @@ public class MessageConstant {
 
   // Alert
   public static final String ALERT_NOT_FOUND = "alert_not_found";
+
+  // Notification
+  public static final String NOTIFICATION_NOT_FOUND = "notification_not_found";
 }

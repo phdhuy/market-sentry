@@ -60,3 +60,8 @@ asset_not_found:
 alert_not_found:
   code: ERR.ALW0101
   message: Alert was not found!
+
+#Notification
+notification_not_found:
+  code: ERR.NOT0101
+  message: Notification was not found!
