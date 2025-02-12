@@ -1,13 +1,17 @@
 package com.phdhuy.stock_alert.infrastructure.external.flink.job;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
+import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AlertDatabaseSource;
 import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AssetPriceDataSource;
-import com.phdhuy.stock_alert.infrastructure.external.flink.function.AlertTriggerFunction;
+import com.phdhuy.stock_alert.infrastructure.external.flink.function.AlertBroadcastFunction;
 import com.phdhuy.stock_alert.infrastructure.external.flink.function.JsonToCoinPriceMapper;
+import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
 import com.phdhuy.stock_alert.infrastructure.external.flink.sink.AlertSink;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.flink.api.common.state.MapStateDescriptor;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.streaming.api.datastream.BroadcastStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -21,8 +25,6 @@ public class AssetPriceAlertJob {
 
   private final JsonToCoinPriceMapper jsonToCoinPriceMapper;
 
-  private final AlertTriggerFunction alertTriggerFunction;
-
   private final AlertSink alertSink;
 
   private final AssetPriceDataSource assetPriceDataSource;
@@ -34,8 +36,20 @@ public class AssetPriceAlertJob {
 
       DataStream<String> assetPriceStream = assetPriceDataSource.getAssetPriceSource(env);
 
+      MapStateDescriptor<String, Alert> alertStateDescriptor =
+          new MapStateDescriptor<>(
+              "alertsBroadcastState",
+              TypeInformation.of(String.class),
+              TypeInformation.of(Alert.class));
+
+      BroadcastStream<Alert> broadcastAlerts =
+          env.addSource(new AlertDatabaseSource()).broadcast(alertStateDescriptor);
+
       DataStream<AssetPrice> coinPriceStream = assetPriceStream.map(jsonToCoinPriceMapper);
-      DataStream<Alert> alertsStream = coinPriceStream.flatMap(alertTriggerFunction);
+
+      DataStream<Alert> alertsStream =
+          coinPriceStream.connect(broadcastAlerts).process(new AlertBroadcastFunction());
+
       alertsStream.addSink(alertSink);
 
       env.execute("Asset Price Alert Job");
