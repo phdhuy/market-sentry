@@ -32,6 +32,6 @@ public class NotificationService implements NotificationUseCase {
 
   @Override
   public Notification getDetailNotification(UUID notificationId, UUID userId) {
-    return null;
+    return notificationRepositoryPort.getDetailNotification(notificationId);
   }
 }

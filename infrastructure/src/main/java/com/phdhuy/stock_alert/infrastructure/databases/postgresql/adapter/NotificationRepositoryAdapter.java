@@ -8,6 +8,8 @@ import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.Notific
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.NotificationRepository;
 import com.phdhuy.stock_alert.infrastructure.mapper.NotificationMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
+import com.phdhuy.stock_alert.shared.constant.MessageConstant;
+import com.phdhuy.stock_alert.shared.exception.NotFoundException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -51,5 +53,18 @@ public class NotificationRepositoryAdapter implements NotificationRepositoryPort
         notificationRepository.getMyNotification(pageable, userId);
 
     return notificationEntities.map(notificationMapper::toNotification);
+  }
+
+  @Override
+  public Notification getDetailNotification(UUID notificationId) {
+    NotificationEntity notificationEntity = this.findById(notificationId);
+    return notificationMapper.toNotification(
+        notificationEntity, notificationEntity.getAlertEntity());
+  }
+
+  public NotificationEntity findById(UUID notificationId) {
+    return notificationRepository
+        .findById(notificationId)
+        .orElseThrow(() -> new NotFoundException(MessageConstant.NOTIFICATION_NOT_FOUND));
   }
 }

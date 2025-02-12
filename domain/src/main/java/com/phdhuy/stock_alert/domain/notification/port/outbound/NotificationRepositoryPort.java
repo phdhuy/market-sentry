@@ -13,4 +13,6 @@ public interface NotificationRepositoryPort {
   void markReadNotification(UUID notificationId, UUID userId);
 
   Page<Notification> getMyNotification(Pageable pageable, UUID userId);
+
+  Notification getDetailNotification(UUID notificationId);
 }
