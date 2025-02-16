@@ -3,7 +3,7 @@ package com.phdhuy.stock_alert.infrastructure.external.flink.job;
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
 import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AlertDatabaseSource;
 import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AssetPriceDataSource;
-import com.phdhuy.stock_alert.infrastructure.external.flink.function.AlertBroadcastFunction;
+import com.phdhuy.stock_alert.infrastructure.external.flink.function.AlertBroadcastTriggerFunction;
 import com.phdhuy.stock_alert.infrastructure.external.flink.function.JsonToCoinPriceMapper;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
 import com.phdhuy.stock_alert.infrastructure.external.flink.sink.AlertSink;
@@ -29,6 +29,8 @@ public class AssetPriceAlertJob {
 
   private final AssetPriceDataSource assetPriceDataSource;
 
+  private final AlertBroadcastTriggerFunction alertBroadcastTriggerFunction;
+
   @EventListener(ApplicationReadyEvent.class)
   public void trigger() {
     try {
@@ -48,7 +50,7 @@ public class AssetPriceAlertJob {
       DataStream<AssetPrice> coinPriceStream = assetPriceStream.map(jsonToCoinPriceMapper);
 
       DataStream<Alert> alertsStream =
-          coinPriceStream.connect(broadcastAlerts).process(new AlertBroadcastFunction());
+          coinPriceStream.connect(broadcastAlerts).process(alertBroadcastTriggerFunction);
 
       alertsStream.addSink(alertSink);
 

@@ -45,4 +45,8 @@ public class Alert {
       throw new ForbiddenException(MessageConstant.FORBIDDEN);
     }
   }
+
+  public boolean isTriggered() {
+    return alertStatus.equals("TRIGGERED");
+  }
 }

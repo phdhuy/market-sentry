@@ -20,4 +20,6 @@ public interface AlertRepositoryPort {
   Alert updateAlert(Alert alert, Alert alertUpdate);
 
   List<Alert> getListAlertActive();
+
+  void updateAlertStatus(Alert alert);
 }

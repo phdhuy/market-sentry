@@ -87,6 +87,14 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
         .toList();
   }
 
+  @Override
+  public void updateAlertStatus(Alert alert) {
+    AlertEntity alertEntity = this.findById(alert.getId());
+
+    alertEntity.setAlertStatus(AlertStatus.valueOf(alert.getAlertStatus()));
+    alertRepository.save(alertEntity);
+  }
+
   private void save(Alert alert, AlertEntity alertEntity) {
     alertEntity.setAlertType(AlertType.valueOf(alert.getAlertType()));
     alertEntity.setAlertConditionType(AlertConditionType.valueOf(alert.getAlertConditionType()));
