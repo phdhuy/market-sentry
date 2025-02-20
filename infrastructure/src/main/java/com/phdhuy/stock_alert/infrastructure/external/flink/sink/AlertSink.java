@@ -28,10 +28,10 @@ public class AlertSink extends RichSinkFunction<Alert> {
     Map<String, Object> vars = new HashMap<>();
 
     vars.put("userName", "John Doe");
-    vars.put("stockSymbol", "AAPL");
+    vars.put("stockSymbol", alert.getAsset().getSymbol());
     vars.put("price", "$150.00");
     vars.put("currency", "USD");
-    vars.put("dateTime", "2025-02-06 14:30 UTC");
+    vars.put("dateTime", alert.getUpdatedAt());
     vars.put("condition", "Above $149.00");
 
     pushNotificationAdapter.pushAlertNotification(alert, vars);
