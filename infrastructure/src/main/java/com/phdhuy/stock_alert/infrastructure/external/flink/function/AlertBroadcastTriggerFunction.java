@@ -3,9 +3,10 @@ package com.phdhuy.stock_alert.infrastructure.external.flink.function;
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
 import com.phdhuy.stock_alert.domain.alert.port.outbound.AlertRuleEvaluatorPort;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
+import com.phdhuy.stock_alert.infrastructure.external.messagebroker.UserAlertActionMessage;
 import com.phdhuy.stock_alert.shared.utils.SpringContext;
 import java.util.Map;
-
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReadOnlyBroadcastState;
@@ -17,10 +18,10 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class AlertBroadcastTriggerFunction
-    extends BroadcastProcessFunction<AssetPrice, Alert, Alert> {
+    extends BroadcastProcessFunction<AssetPrice, UserAlertActionMessage, Alert> {
 
-  private final MapStateDescriptor<String, Alert> alertStateDescriptor =
-      new MapStateDescriptor<>("alertsBroadcastState", String.class, Alert.class);
+  private final MapStateDescriptor<UUID, Alert> alertStateDescriptor =
+      new MapStateDescriptor<>("alertsBroadcastState", UUID.class, Alert.class);
 
   private transient AlertRuleEvaluatorPort alertRuleEvaluatorPort;
 
@@ -33,28 +34,48 @@ public class AlertBroadcastTriggerFunction
   @Override
   public void processElement(AssetPrice price, ReadOnlyContext ctx, Collector<Alert> out)
       throws Exception {
-    ReadOnlyBroadcastState<String, Alert> alerts = ctx.getBroadcastState(alertStateDescriptor);
+    ReadOnlyBroadcastState<UUID, Alert> alerts = ctx.getBroadcastState(alertStateDescriptor);
+    log.info("Alerts in state: {}", alerts.toString());
+
     Map<String, Double> prices = price.getPricesAsMap();
 
     for (Map.Entry<String, Double> entry : prices.entrySet()) {
       String assetId = entry.getKey();
       double priceValue = entry.getValue();
 
-      if (alerts.contains(assetId)) {
-        Alert alert = alerts.get(assetId);
+      for (Map.Entry<UUID, Alert> alertEntry : alerts.immutableEntries()) {
+        Alert alert = alertEntry.getValue();
 
-        boolean isConditionMet = alertRuleEvaluatorPort.evaluateAlert(alert, priceValue);
+        if (alert.getAsset().getIdentity().equals(assetId)) {
+          boolean isConditionMet = alertRuleEvaluatorPort.evaluateAlert(alert, priceValue);
 
-        if (isConditionMet) {
-          out.collect(alert);
+          if (isConditionMet) {
+            out.collect(alert);
+          }
         }
       }
     }
   }
 
   @Override
-  public void processBroadcastElement(Alert alert, Context ctx, Collector<Alert> out)
+  public void processBroadcastElement(UserAlertActionMessage alertAction, Context ctx, Collector<Alert> out)
       throws Exception {
-    ctx.getBroadcastState(alertStateDescriptor).put(alert.getAsset().getIdentity(), alert);
+    var broadcastState = ctx.getBroadcastState(alertStateDescriptor);
+    String action = alertAction.getAction();
+
+    Alert alert = alertAction.getData();
+
+    switch (action) {
+      case "ADD", "UPDATE":
+        log.info("Updating broadcast state with alert: {}", alert.getId());
+        broadcastState.put(alert.getId(), alert);
+        break;
+      case "DELETE":
+        log.info("Removing alert from state: {}", alert.getId());
+        broadcastState.remove(alert.getId());
+        break;
+      default:
+        log.warn("Unknown action received: {}", action);
+    }
   }
 }

@@ -1,12 +1,14 @@
 package com.phdhuy.stock_alert.infrastructure.external.flink.job;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AlertDatabaseSource;
+import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.UserAlertDataSource;
 import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AssetPriceDataSource;
 import com.phdhuy.stock_alert.infrastructure.external.flink.function.AlertBroadcastTriggerFunction;
 import com.phdhuy.stock_alert.infrastructure.external.flink.function.JsonToCoinPriceMapper;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
 import com.phdhuy.stock_alert.infrastructure.external.flink.sink.AlertSink;
+import com.phdhuy.stock_alert.infrastructure.external.messagebroker.UserAlertActionMessage;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.state.MapStateDescriptor;
@@ -24,11 +26,8 @@ import org.springframework.stereotype.Component;
 public class AssetPriceAlertJob {
 
   private final JsonToCoinPriceMapper jsonToCoinPriceMapper;
-
   private final AlertSink alertSink;
-
   private final AssetPriceDataSource assetPriceDataSource;
-
   private final AlertBroadcastTriggerFunction alertBroadcastTriggerFunction;
 
   @EventListener(ApplicationReadyEvent.class)
@@ -38,14 +37,16 @@ public class AssetPriceAlertJob {
 
       DataStream<String> assetPriceStream = assetPriceDataSource.getAssetPriceSource(env);
 
-      MapStateDescriptor<String, Alert> alertStateDescriptor =
+      MapStateDescriptor<UUID, Alert> alertStateDescriptor =
           new MapStateDescriptor<>(
               "alertsBroadcastState",
-              TypeInformation.of(String.class),
+              TypeInformation.of(UUID.class),
               TypeInformation.of(Alert.class));
 
-      BroadcastStream<Alert> broadcastAlerts =
-          env.addSource(new AlertDatabaseSource()).broadcast(alertStateDescriptor);
+      BroadcastStream<UserAlertActionMessage> broadcastAlerts =
+          env.addSource(new UserAlertDataSource())
+              .returns(TypeInformation.of(UserAlertActionMessage.class))
+              .broadcast(alertStateDescriptor);
 
       DataStream<AssetPrice> coinPriceStream = assetPriceStream.map(jsonToCoinPriceMapper);
 

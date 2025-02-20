@@ -8,6 +8,8 @@ import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.A
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.TriggerType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AlertRepository;
+import com.phdhuy.stock_alert.infrastructure.external.messagebroker.RabbitMQAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.messagebroker.UserAlertActionMessage;
 import com.phdhuy.stock_alert.infrastructure.mapper.AlertMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import com.phdhuy.stock_alert.shared.common.CommonFunction;
@@ -30,6 +32,8 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
 
   private final AssetRepositoryAdapter assetRepositoryAdapter;
 
+  private final RabbitMQAdapter rabbitMQAdapter;
+
   private final AlertMapper alertMapper;
 
   @Override
@@ -43,7 +47,12 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
     alertEntity.setAssetEntity(assetRepositoryAdapter.findAssetEntityById(assetId));
 
     alertRepository.save(alertEntity);
-    return alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity());
+
+    Alert alertResponse =
+        alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity(), alertEntity.getUserEntity());
+    rabbitMQAdapter.sendUserAlertMessage(
+        UserAlertActionMessage.builder().action("ADD").data(alertResponse).build());
+    return alertResponse;
   }
 
   @Override
@@ -64,6 +73,8 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
     AlertEntity alertEntity = this.findById(alert.getId());
     alertEntity.setDeletedAt(CommonFunction.getCurrentDateTime());
     alertRepository.save(alertEntity);
+    rabbitMQAdapter.sendUserAlertMessage(
+        UserAlertActionMessage.builder().action("DELETE").data(alert).build());
   }
 
   @Override
@@ -73,7 +84,13 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
     this.save(alertUpdate, alertEntity);
 
     alertRepository.save(alertEntity);
-    return alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity());
+    Alert alertResponse =
+        alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity(), alertEntity.getUserEntity());
+
+    rabbitMQAdapter.sendUserAlertMessage(
+        UserAlertActionMessage.builder().action("UPDATE").data(alertResponse).build());
+
+    return alertResponse;
   }
 
   @Override
@@ -93,6 +110,11 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
 
     alertEntity.setAlertStatus(AlertStatus.valueOf(alert.getAlertStatus()));
     alertRepository.save(alertEntity);
+
+    if (alert.getAlertStatus().equals(AlertStatus.TRIGGERED.toString())) {
+      rabbitMQAdapter.sendUserAlertMessage(
+          UserAlertActionMessage.builder().action("DELETE").data(alert).build());
+    }
   }
 
   private void save(Alert alert, AlertEntity alertEntity) {

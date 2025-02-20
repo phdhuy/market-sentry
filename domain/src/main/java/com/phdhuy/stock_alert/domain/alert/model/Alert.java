@@ -9,11 +9,16 @@ import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
 import java.sql.Timestamp;
 import java.util.UUID;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class Alert {
@@ -39,6 +44,8 @@ public class Alert {
   private Asset asset;
 
   private User user;
+
+  private boolean triggered;
 
   public void isOwner(UUID userId) {
     if (this.user == null || !this.user.getId().equals(userId)) {
