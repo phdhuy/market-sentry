@@ -2,8 +2,9 @@ package com.phdhuy.stock_alert.infrastructure.external.flink.function;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
 import com.phdhuy.stock_alert.domain.alert.port.outbound.AlertRuleEvaluatorPort;
+import com.phdhuy.stock_alert.infrastructure.external.flink.dto.AlertTriggerMessage;
+import com.phdhuy.stock_alert.infrastructure.external.flink.dto.UserAlertActionMessage;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
-import com.phdhuy.stock_alert.infrastructure.external.messagebroker.UserAlertActionMessage;
 import com.phdhuy.stock_alert.shared.utils.SpringContext;
 import java.util.Map;
 import java.util.UUID;
@@ -18,7 +19,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class AlertBroadcastTriggerFunction
-    extends BroadcastProcessFunction<AssetPrice, UserAlertActionMessage, Alert> {
+    extends BroadcastProcessFunction<AssetPrice, UserAlertActionMessage, AlertTriggerMessage> {
 
   private final MapStateDescriptor<UUID, Alert> alertStateDescriptor =
       new MapStateDescriptor<>("alertsBroadcastState", UUID.class, Alert.class);
@@ -32,8 +33,8 @@ public class AlertBroadcastTriggerFunction
   }
 
   @Override
-  public void processElement(AssetPrice price, ReadOnlyContext ctx, Collector<Alert> out)
-      throws Exception {
+  public void processElement(
+      AssetPrice price, ReadOnlyContext ctx, Collector<AlertTriggerMessage> out) throws Exception {
     ReadOnlyBroadcastState<UUID, Alert> alerts = ctx.getBroadcastState(alertStateDescriptor);
     log.info("Alerts in state: {}", alerts.toString());
 
@@ -50,7 +51,7 @@ public class AlertBroadcastTriggerFunction
           boolean isConditionMet = alertRuleEvaluatorPort.evaluateAlert(alert, priceValue);
 
           if (isConditionMet) {
-            out.collect(alert);
+            out.collect(new AlertTriggerMessage(priceValue, "", alert));
           }
         }
       }
@@ -58,7 +59,8 @@ public class AlertBroadcastTriggerFunction
   }
 
   @Override
-  public void processBroadcastElement(UserAlertActionMessage alertAction, Context ctx, Collector<Alert> out)
+  public void processBroadcastElement(
+      UserAlertActionMessage alertAction, Context ctx, Collector<AlertTriggerMessage> out)
       throws Exception {
     var broadcastState = ctx.getBroadcastState(alertStateDescriptor);
     String action = alertAction.getAction();

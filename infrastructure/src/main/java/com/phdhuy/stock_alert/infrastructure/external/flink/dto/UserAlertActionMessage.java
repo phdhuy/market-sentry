@@ -1,4 +1,4 @@
-package com.phdhuy.stock_alert.infrastructure.external.messagebroker;
+package com.phdhuy.stock_alert.infrastructure.external.flink.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.phdhuy.stock_alert.domain.alert.model.Alert;

@@ -55,7 +55,7 @@
     <div class="header">📈 Stock Price Alert</div>
 
     <div class="content">
-        <p>Dear <strong th:text="${userName}">User</strong>,</p>
+        <p>Dear <strong th:text="${email}">User</strong>,</p>
         <p>The stock <strong th:text="${stockSymbol}">AAPL</strong> has reached your alert price.</p>
         <p>💰 <strong>Current Price:</strong> <span th:text="${price}">$150.00</span> <span th:text="${currency}">USD</span></p>
         <p>📅 <strong>Date:</strong> <span th:text="${dateTime}">2025-02-06 14:30 UTC</span></p>
