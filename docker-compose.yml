@@ -41,41 +41,6 @@ services:
     networks:
       - stock-alert-network
 
-  flink-jobmanager:
-    image: flink:latest
-    container_name: flink-jobmanager
-    ports:
-      - "8082:8081"
-      - "6123:6123"
-    environment:
-      - TASK_MANAGER_HEAP_SIZE=1024m
-      - JOB_MANAGER_HEAP_SIZE=1024m
-      - FLINK_PROPERTIES=jobmanager.rpc.address:flink-jobmanager
-    command: jobmanager
-    volumes:
-      - flink-job:/opt/flink/usrlib
-    depends_on:
-      - rabbitmq
-      - influxdb
-    networks:
-      - stock-alert-network
-
-  flink-taskmanager:
-    image: flink:latest
-    container_name: flink-taskmanager
-    depends_on:
-      - flink-jobmanager
-    environment:
-      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
-      - TASK_MANAGER_HEAP_SIZE=1024m
-    command: taskmanager
-    volumes:
-      - flink-job:/opt/flink/usrlib
-    links:
-      - flink-jobmanager
-    networks:
-      - stock-alert-network
-
   backend:
     build:
       context: .
@@ -85,7 +50,6 @@ services:
       - postgres
       - rabbitmq
       - influxdb
-      - flink-jobmanager
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/stock-alert
       SPRING_DATASOURCE_USERNAME: postgres
@@ -105,7 +69,6 @@ services:
       - postgres
       - rabbitmq
       - influxdb
-      - flink-jobmanager
     networks:
       - stock-alert-network
 
@@ -113,7 +76,6 @@ volumes:
   postgres-data:
   influxdb-data:
   rabbitmq-data:
-  flink-job:
 
 networks:
   stock-alert-network:
