@@ -36,7 +36,7 @@ public class AlertBroadcastTriggerFunction
   public void processElement(
       AssetPrice price, ReadOnlyContext ctx, Collector<AlertTriggerMessage> out) throws Exception {
     ReadOnlyBroadcastState<UUID, Alert> alerts = ctx.getBroadcastState(alertStateDescriptor);
-    log.info("Alerts in state: {}", alerts.toString());
+    log.debug("Alerts in state: {}", alerts.toString());
 
     Map<String, Double> prices = price.getPricesAsMap();
 
