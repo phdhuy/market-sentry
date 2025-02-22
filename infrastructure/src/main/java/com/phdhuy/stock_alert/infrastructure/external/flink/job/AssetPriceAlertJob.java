@@ -1,13 +1,14 @@
 package com.phdhuy.stock_alert.infrastructure.external.flink.job;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.UserAlertDataSource;
 import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.AssetPriceDataSource;
+import com.phdhuy.stock_alert.infrastructure.external.flink.datasource.UserAlertDataSource;
+import com.phdhuy.stock_alert.infrastructure.external.flink.dto.AlertTriggerMessage;
+import com.phdhuy.stock_alert.infrastructure.external.flink.dto.UserAlertActionMessage;
 import com.phdhuy.stock_alert.infrastructure.external.flink.function.AlertBroadcastTriggerFunction;
 import com.phdhuy.stock_alert.infrastructure.external.flink.function.JsonToCoinPriceMapper;
 import com.phdhuy.stock_alert.infrastructure.external.flink.model.AssetPrice;
 import com.phdhuy.stock_alert.infrastructure.external.flink.sink.AlertSink;
-import com.phdhuy.stock_alert.infrastructure.external.messagebroker.UserAlertActionMessage;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +51,7 @@ public class AssetPriceAlertJob {
 
       DataStream<AssetPrice> coinPriceStream = assetPriceStream.map(jsonToCoinPriceMapper);
 
-      DataStream<Alert> alertsStream =
+      DataStream<AlertTriggerMessage> alertsStream =
           coinPriceStream.connect(broadcastAlerts).process(alertBroadcastTriggerFunction);
 
       alertsStream.addSink(alertSink);

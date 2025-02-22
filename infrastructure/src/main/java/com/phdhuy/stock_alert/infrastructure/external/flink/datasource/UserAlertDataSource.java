@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
 import com.phdhuy.stock_alert.domain.alert.port.outbound.AlertRepositoryPort;
-import com.phdhuy.stock_alert.infrastructure.external.messagebroker.UserAlertActionMessage;
+import com.phdhuy.stock_alert.infrastructure.external.flink.dto.UserAlertActionMessage;
 import com.phdhuy.stock_alert.shared.utils.SpringContext;
 import com.rabbitmq.client.*;
 import java.io.IOException;
