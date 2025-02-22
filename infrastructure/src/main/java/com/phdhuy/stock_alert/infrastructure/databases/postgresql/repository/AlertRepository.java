@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AlertRepository extends JpaRepository<AlertEntity, UUID> {
 
-  @Query(value = "select * from alert a where a.user_id = :userId", nativeQuery = true)
+  @Query(value = "select * from alert a where a.user_id = :userId and a.deleted_at is null", nativeQuery = true)
   Page<AlertEntity> getMyAlert(Pageable pageable, UUID userId);
 
   @Query(
