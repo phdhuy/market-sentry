@@ -17,6 +17,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,6 +30,7 @@ public class PriceStockAdapter {
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
   @EventListener(ApplicationReadyEvent.class)
+  @Order(1)
   public void startStockPriceFetcher() {
     ZoneId zoneId = ZoneId.of(CommonConstant.ZONE_ID);
 
@@ -53,31 +55,34 @@ public class PriceStockAdapter {
 
     LocalDate today = LocalDate.now(zoneId);
     DayOfWeek dayOfWeek = today.getDayOfWeek();
-
-    if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-      return;
-    }
-
     LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
 
-    if (currentTime.isAfter(marketClose)) {
+    if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+      webDriverConfig.quitWebDriver();
       return;
     }
 
-    if ((currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen))) {
+    if (currentTime.isAfter(marketClose)) {
+      webDriverConfig.quitWebDriver();
+      return;
+    }
+
+    if (currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen)) {
+      webDriverConfig.quitWebDriver();
       return;
     }
 
     if (currentTime.isBefore(marketOpen)) {
+      webDriverConfig.quitWebDriver();
       return;
     }
 
     WebDriver webDriver = webDriverConfig.getWebDriver();
     try {
       webDriver.get(CommonConstant.PRICE_STOCK);
-      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(7));
+      WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(5));
 
-      Map<String, String> priceMap = getPriceStock(wait);
+      Map<String, String> priceMap = getStockData(wait);
       if (!priceMap.isEmpty()) {
         sendToRabbitMQ(priceMap);
       }
@@ -86,22 +91,29 @@ public class PriceStockAdapter {
     }
   }
 
-  private Map<String, String> getPriceStock(WebDriverWait wait) {
-    Map<String, String> priceMap = new HashMap<>();
+  private Map<String, String> getStockData(WebDriverWait wait) {
+    Map<String, String> stockData = new HashMap<>();
     try {
-      List<WebElement> priceElements =
+      List<WebElement> rowElements =
           wait.until(
-              ExpectedConditions.visibilityOfAllElementsLocatedBy(
-                  By.xpath(CommonConstant.LAST_PRICE_VALUE_XPATH)));
-      for (WebElement stock : priceElements) {
-        String id = stock.getAttribute("id").substring(0, 3);
-        String price = stock.getText();
-        priceMap.put(id, price);
+              ExpectedConditions.presenceOfAllElementsLocatedBy(
+                  By.cssSelector(CommonConstant.ROW_ELEMENT_VALUE)));
+
+      for (WebElement row : rowElements) {
+        WebElement symbolElement =
+            row.findElement(By.cssSelector(CommonConstant.SYMBOL_ELEMENT_VALUE));
+        String stockSymbol = symbolElement.getText().trim();
+
+        WebElement matchedPriceElement =
+            row.findElement(By.cssSelector(CommonConstant.PRICE_ELEMENT_VALUE));
+        String matchedPrice = matchedPriceElement.getText().trim();
+
+        stockData.put(stockSymbol, matchedPrice);
       }
-    } catch (TimeoutException ignored) {
-      // do nothing
+    } catch (Exception e) {
+      log.error("Failed to scrape stock data: {}", e.getMessage(), e);
     }
-    return priceMap;
+    return stockData;
   }
 
   private void sendToRabbitMQ(Map<String, String> priceMap) throws JsonProcessingException {

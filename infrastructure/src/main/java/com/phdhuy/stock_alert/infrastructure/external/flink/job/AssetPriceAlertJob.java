@@ -19,6 +19,7 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,6 +33,7 @@ public class AssetPriceAlertJob {
   private final AlertBroadcastTriggerFunction alertBroadcastTriggerFunction;
 
   @EventListener(ApplicationReadyEvent.class)
+  @Order(2)
   public void trigger() {
     try {
       final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
