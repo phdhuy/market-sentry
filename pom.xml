@@ -213,6 +213,16 @@
             <artifactId>flink-clients</artifactId>
             <version>1.17.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-longpolling</artifactId>
+            <version>8.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.telegram</groupId>
+            <artifactId>telegrambots-client</artifactId>
+            <version>8.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

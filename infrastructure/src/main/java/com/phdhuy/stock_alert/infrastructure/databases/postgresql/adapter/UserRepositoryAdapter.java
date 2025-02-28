@@ -54,4 +54,10 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
         .findById(userId)
         .orElseThrow(() -> new NotFoundException(MessageConstant.USER_NOT_FOUND));
   }
+
+  public UserEntity findUserEntityByEmail(String email) {
+    return userRepository
+        .findByEmail(email)
+        .orElseThrow(() -> new NotFoundException(MessageConstant.USER_NOT_FOUND));
+  }
 }

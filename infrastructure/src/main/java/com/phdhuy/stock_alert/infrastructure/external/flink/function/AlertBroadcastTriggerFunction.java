@@ -51,7 +51,8 @@ public class AlertBroadcastTriggerFunction
           boolean isConditionMet = alertRuleEvaluatorPort.evaluateAlert(alert, priceValue);
 
           if (isConditionMet) {
-            out.collect(new AlertTriggerMessage(priceValue, "", alert));
+            String conditionMessage = buildConditionMessage(alert, priceValue);
+            out.collect(new AlertTriggerMessage(priceValue, conditionMessage, alert));
           }
         }
       }
@@ -80,4 +81,23 @@ public class AlertBroadcastTriggerFunction
         log.warn("Unknown action received: {}", action);
     }
   }
+
+  private String buildConditionMessage(Alert alert, double priceValue) {
+    String conditionType = alert.getAlertConditionType();
+    double targetPrice = alert.getValue();
+
+    return switch (conditionType) {
+      case "GREATER_THAN" ->
+              String.format("Alert triggered: %s price is %.2f, which is above your threshold of %.2f.",
+                      alert.getAsset().getName(), priceValue, targetPrice);
+      case "LESS_THAN" ->
+              String.format("Alert triggered: %s price is %.2f, which is below your threshold of %.2f.",
+                      alert.getAsset().getName(), priceValue, targetPrice);
+      case "EQUALS" ->
+              String.format("Alert triggered: %s price has reached exactly %.2f.",
+                      alert.getAsset().getName(), targetPrice);
+      default -> "Alert triggered due to an unknown condition.";
+    };
+  }
+
 }

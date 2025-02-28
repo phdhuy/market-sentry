@@ -16,9 +16,13 @@ public class PushNotificationAdapter {
 
   private final MailSenderAdapter mailSenderAdapter;
 
+  private final TelegramSenderAdapter telegramSenderAdapter;
+
+
   public void pushAlertNotification(Alert alert, Map<String, Object> vars) {
     notificationRepositoryAdapter.createNotification(alert, "Alert Notification");
     mailSenderAdapter.sendEmail(
         alert.getUser().getEmail(), "Stock Alert Notification", "mail/stock-alert", vars);
+    telegramSenderAdapter.sendMessage(alert, vars);
   }
 }

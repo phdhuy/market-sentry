@@ -57,22 +57,11 @@ public class PriceStockAdapter {
     DayOfWeek dayOfWeek = today.getDayOfWeek();
     LocalTime currentTime = ZonedDateTime.now(zoneId).toLocalTime();
 
-    if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-      webDriverConfig.quitWebDriver();
-      return;
-    }
-
-    if (currentTime.isAfter(marketClose)) {
-      webDriverConfig.quitWebDriver();
-      return;
-    }
-
-    if (currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen)) {
-      webDriverConfig.quitWebDriver();
-      return;
-    }
-
-    if (currentTime.isBefore(marketOpen)) {
+    if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY ||
+            currentTime.isBefore(marketOpen) ||
+            (currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen)) ||
+            currentTime.isAfter(marketClose)) {
+      log.info("Quit web driver");
       webDriverConfig.quitWebDriver();
       return;
     }

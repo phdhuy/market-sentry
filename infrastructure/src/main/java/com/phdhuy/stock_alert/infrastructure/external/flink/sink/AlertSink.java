@@ -34,7 +34,7 @@ public class AlertSink extends RichSinkFunction<AlertTriggerMessage> {
     vars.put("price", alertTriggerMessage.getPriceTrigger());
     vars.put("currency", "USD");
     vars.put("dateTime", alertTriggerMessage.getAlert().getUpdatedAt());
-    vars.put("condition", "Above $149.00");
+    vars.put("condition", alertTriggerMessage.getCondition());
 
     pushNotificationAdapter.pushAlertNotification(alertTriggerMessage.getAlert(), vars);
   }
