@@ -50,3 +50,9 @@ create_portfolio_request:
     not_blank:
       code: VAL.CPR0102
       message: Avatar must not be blank!
+
+create_alert_request:
+  alert_method_types:
+    invalid_value:
+      code: VAL.CAR0101
+      message: Invalid value for alert method types!

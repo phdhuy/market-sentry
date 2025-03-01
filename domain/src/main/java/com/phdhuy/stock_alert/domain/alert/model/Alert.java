@@ -8,6 +8,7 @@ import com.phdhuy.stock_alert.domain.user.model.User;
 import com.phdhuy.stock_alert.shared.constant.MessageConstant;
 import com.phdhuy.stock_alert.shared.exception.ForbiddenException;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +37,8 @@ public class Alert {
   private Double value;
 
   private String triggerType;
+
+  private List<String> alertMethodTypes;
 
   private Timestamp expirationAt;
 

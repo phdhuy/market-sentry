@@ -2,11 +2,13 @@ package com.phdhuy.stock_alert.application.dto.request.alert;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.phdhuy.stock_alert.application.dto.validator.annotation.ValidAlertMethods;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertConditionType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.TriggerType;
 import jakarta.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,4 +26,7 @@ public class CreateAlertRequest {
   @NotNull private TriggerType triggerType;
 
   private Timestamp expirationAt;
+
+  @ValidAlertMethods
+  private List<String> alertMethodTypes;
 }

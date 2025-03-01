@@ -1,14 +1,14 @@
 package com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity;
 
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertConditionType;
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertStatus;
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertType;
-import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.TriggerType;
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.*;
+import io.hypersistence.utils.hibernate.type.array.ListArrayType;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Type;
 
 @Builder
 @Getter
@@ -41,6 +41,10 @@ public class AlertEntity extends BaseEntity {
   @Column
   @Enumerated(EnumType.STRING)
   private AlertStatus alertStatus;
+
+  @Type(ListArrayType.class)
+  @Column(columnDefinition = "text[]")
+  private List<String> alertMethodTypes;
 
   @ManyToOne
   @JoinColumn(name = "asset_id")

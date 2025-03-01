@@ -93,11 +93,7 @@ public class AlertBroadcastTriggerFunction
       case "LESS_THAN" ->
               String.format("Alert triggered: %s price is %.2f, which is below your threshold of %.2f.",
                       alert.getAsset().getName(), priceValue, targetPrice);
-      case "EQUALS" ->
-              String.format("Alert triggered: %s price has reached exactly %.2f.",
-                      alert.getAsset().getName(), targetPrice);
       default -> "Alert triggered due to an unknown condition.";
     };
   }
-
 }

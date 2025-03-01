@@ -1,7 +1,7 @@
 package com.phdhuy.stock_alert.infrastructure.external.notification.stragtegy.impl;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
-import com.phdhuy.stock_alert.infrastructure.external.notification.adapter.MailSenderAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.notification.adapter.TelegramSenderAdapter;
 import com.phdhuy.stock_alert.infrastructure.external.notification.stragtegy.NotificationStrategy;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EmailNotificationStrategy implements NotificationStrategy {
+public class TelegramNotificationStrategy implements NotificationStrategy {
 
-  private final MailSenderAdapter mailSenderAdapter;
+  private final TelegramSenderAdapter telegramSenderAdapter;
 
-  private static final String TYPE = "EMAIL";
+  private static final String TYPE = "TELEGRAM";
 
   @Override
   public boolean isContainAlertMethodType(List<String> alertMethodTypes) {
@@ -23,7 +23,6 @@ public class EmailNotificationStrategy implements NotificationStrategy {
 
   @Override
   public void sendAlertNotification(Alert alert, Map<String, Object> vars) {
-    mailSenderAdapter.sendEmail(
-        alert.getUser().getEmail(), "Stock Alert Notification", "mail/stock-alert", vars);
+    telegramSenderAdapter.sendMessage(alert, vars);
   }
 }

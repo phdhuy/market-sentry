@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import com.phdhuy.stock_alert.application.dto.response.asset.AssetInfoResponse;
@@ -33,6 +34,8 @@ public class AlertInfoResponse {
   private Timestamp expirationAt;
 
   private String alertStatus;
+
+  private List<String> alertMethodTypes;
 
   private AssetInfoResponse asset;
 }

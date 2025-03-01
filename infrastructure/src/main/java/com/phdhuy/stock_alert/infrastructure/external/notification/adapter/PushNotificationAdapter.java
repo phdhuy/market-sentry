@@ -2,27 +2,27 @@ package com.phdhuy.stock_alert.infrastructure.external.notification.adapter;
 
 import com.phdhuy.stock_alert.domain.alert.model.Alert;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.adapter.NotificationRepositoryAdapter;
+import com.phdhuy.stock_alert.infrastructure.external.notification.stragtegy.NotificationStrategy;
+import com.phdhuy.stock_alert.infrastructure.external.notification.stragtegy.NotificationStrategyFactory;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
-@Slf4j
 public class PushNotificationAdapter {
 
   private final NotificationRepositoryAdapter notificationRepositoryAdapter;
-
-  private final MailSenderAdapter mailSenderAdapter;
-
-  private final TelegramSenderAdapter telegramSenderAdapter;
-
+  private final NotificationStrategyFactory notificationStrategyFactory;
 
   public void pushAlertNotification(Alert alert, Map<String, Object> vars) {
     notificationRepositoryAdapter.createNotification(alert, "Alert Notification");
-    mailSenderAdapter.sendEmail(
-        alert.getUser().getEmail(), "Stock Alert Notification", "mail/stock-alert", vars);
-    telegramSenderAdapter.sendMessage(alert, vars);
+
+    List<NotificationStrategy> strategies = notificationStrategyFactory.getStrategies(alert.getAlertMethodTypes());
+
+    for (NotificationStrategy strategy : strategies) {
+      strategy.sendAlertNotification(alert, vars);
+    }
   }
 }

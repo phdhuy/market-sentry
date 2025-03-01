@@ -8,8 +8,8 @@ import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.A
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AlertType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.TriggerType;
 import com.phdhuy.stock_alert.infrastructure.databases.postgresql.repository.AlertRepository;
-import com.phdhuy.stock_alert.infrastructure.external.messagebroker.RabbitMQAdapter;
 import com.phdhuy.stock_alert.infrastructure.external.flink.dto.UserAlertActionMessage;
+import com.phdhuy.stock_alert.infrastructure.external.messagebroker.RabbitMQAdapter;
 import com.phdhuy.stock_alert.infrastructure.mapper.AlertMapper;
 import com.phdhuy.stock_alert.shared.annotation.PersistenceAdapter;
 import com.phdhuy.stock_alert.shared.common.CommonFunction;
@@ -123,6 +123,7 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
     alertEntity.setValue(alert.getValue());
     alertEntity.setTriggerType(TriggerType.valueOf(alert.getTriggerType()));
     alertEntity.setExpirationAt(alert.getExpirationAt());
+    alertEntity.setAlertMethodTypes(alert.getAlertMethodTypes());
   }
 
   public AlertEntity findById(UUID alertId) {
