@@ -41,4 +41,8 @@ public class WebDriverConfig {
       driver = null;
     }
   }
+
+  public boolean isWebDriverAlive() {
+    return driver != null;
+  }
 }

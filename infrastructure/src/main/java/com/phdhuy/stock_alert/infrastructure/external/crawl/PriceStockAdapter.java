@@ -61,7 +61,6 @@ public class PriceStockAdapter {
             currentTime.isBefore(marketOpen) ||
             (currentTime.isAfter(morningClose) && currentTime.isBefore(afternoonOpen)) ||
             currentTime.isAfter(marketClose)) {
-      log.info("Quit web driver");
       webDriverConfig.quitWebDriver();
       return;
     }
