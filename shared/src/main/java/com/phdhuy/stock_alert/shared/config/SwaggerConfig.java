@@ -32,6 +32,6 @@ public class SwaggerConfig {
   }
 
   private Info apiInfo() {
-    return new Info().title("Stock Alert").version("1.0.0");
+    return new Info().title("Market Sentry").version("1.0.0");
   }
 }
