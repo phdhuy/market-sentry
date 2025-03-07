@@ -6,6 +6,7 @@ import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
 import java.util.List;
 import java.util.Objects;
 
+import io.sentry.Sentry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,7 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(InternalServerException.class)
   public ResponseEntity<ResponseDataAPI> internalServerException(InternalServerException ex) {
+    Sentry.captureException(ex);
     ErrorResponse errorResponse = CommonFunction.getExceptionError(ex.getMessage());
     ResponseDataAPI responseDataAPI = ResponseDataAPI.error(errorResponse);
     return new ResponseEntity<>(responseDataAPI, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,7 +29,11 @@ public class SwaggerConfig {
                         .scheme("bearer")
                         .bearerFormat("JWT")))
         .info(apiInfo())
-        .addSecurityItem(new SecurityRequirement().addList(schemeName));
+        .addSecurityItem(new SecurityRequirement().addList(schemeName))
+        .addServersItem(
+            new Server().url("https://marketsentry.site/").description("Production Env"))
+        .addServersItem(
+            new Server().url("http://localhost:8081/").description("Dev Env"));
   }
 
   private Info apiInfo() {
