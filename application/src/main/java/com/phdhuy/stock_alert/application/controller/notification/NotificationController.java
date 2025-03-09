@@ -1,5 +1,6 @@
 package com.phdhuy.stock_alert.application.controller.notification;
 
+import com.phdhuy.stock_alert.application.dto.response.notification.CountUnreadNotificationResponse;
 import com.phdhuy.stock_alert.domain.notification.model.Notification;
 import com.phdhuy.stock_alert.domain.notification.port.inbound.NotificationUseCase;
 import com.phdhuy.stock_alert.infrastructure.security.domain.UserPrincipal;
@@ -30,7 +31,9 @@ public class NotificationController {
       @CurrentUser UserPrincipal userPrincipal) {
     return ResponseEntity.ok(
         ResponseDataAPI.successWithoutMeta(
-            notificationUseCase.countUnreadNotification(userPrincipal.getId())));
+            CountUnreadNotificationResponse.builder()
+                .count(notificationUseCase.countUnreadNotification(userPrincipal.getId()))
+                .build()));
   }
 
   @PostMapping("/{notificationId}/mark-read")
