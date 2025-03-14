@@ -17,7 +17,7 @@ public class PushNotificationAdapter {
   private final NotificationStrategyFactory notificationStrategyFactory;
 
   public void pushAlertNotification(Alert alert, Map<String, Object> vars) {
-    notificationRepositoryAdapter.createNotification(alert, "Alert Notification");
+    notificationRepositoryAdapter.createNotification(alert, vars.get("condition").toString());
 
     List<NotificationStrategy> strategies = notificationStrategyFactory.getStrategies(alert.getAlertMethodTypes());
 

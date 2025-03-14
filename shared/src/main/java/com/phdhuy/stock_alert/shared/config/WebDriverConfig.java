@@ -36,6 +36,7 @@ public class WebDriverConfig {
 
   public void quitWebDriver() {
     if (driver != null) {
+      log.info("Quitting web driver");
       driver.manage().deleteAllCookies();
       driver.quit();
       driver = null;

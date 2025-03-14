@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+
+import com.phdhuy.stock_alert.infrastructure.databases.postgresql.entity.enums.AssetType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,11 +22,10 @@ public interface AssetRepository extends JpaRepository<AssetEntity, UUID> {
 
   @Query(
       value =
-          "SELECT * "
-                  + "FROM asset a "
-                  + "WHERE a.asset_type = :assetType and (:isAll = true or a.symbol IN (:query)) ",
-      nativeQuery = true)
-  Page<AssetEntity> getAllAssetSummary(Pageable pageable, String assetType, List<String> query, boolean isAll);
+          "SELECT a "
+                  + "FROM AssetEntity a "
+                  + "WHERE a.assetType = :assetType and (:isAll = true or a.symbol LIKE %:query%) ")
+  Page<AssetEntity> getAllAssetSummary(Pageable pageable, AssetType assetType, String query, boolean isAll);
 
   List<AssetEntity> findByIdentityIn(Set<String> identities);
 }

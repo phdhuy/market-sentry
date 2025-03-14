@@ -34,10 +34,9 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
   }
 
   @Override
-  public Page<Asset> getAllAsset(Pageable pageable, String type, List<String> query) {
-    boolean isAll = query.isEmpty();
+  public Page<Asset> getAllAsset(Pageable pageable, String type, String query) {
     Page<AssetEntity> assetSummaries =
-        assetRepository.getAllAssetSummary(pageable, type, query, isAll);
+        assetRepository.getAllAssetSummary(pageable, AssetType.valueOf(type), query.toUpperCase(), query.isEmpty());
     List<String> symbols =
         assetSummaries.getContent().stream().map(AssetEntity::getIdentity).toList();
 
@@ -65,30 +64,6 @@ public class AssetRepositoryAdapter implements AssetRepositoryPort {
             .orElseThrow(() -> new NotFoundException(MessageConstant.ASSET_NOT_FOUND));
     return assetMapper.toAssetFromAssetEntity(
         assetEntity, priceAssetRepositoryAdapter.getLatestPriceAsset(assetEntity.getIdentity()));
-  }
-
-  @Override
-  public Asset createAsset(Asset asset) {
-    AssetEntity assetEntity = new AssetEntity();
-
-    assetEntity.setSymbol(asset.getSymbol());
-    assetEntity.setName(asset.getName());
-    assetEntity.setExplorer(asset.getExplorer());
-    assetEntity.setAssetType(AssetType.valueOf(asset.getAssetType()));
-
-    return assetMapper.toAsset(assetRepository.save(assetEntity));
-  }
-
-  @Override
-  public Asset updateAsset(Asset asset) {
-    AssetEntity assetEntity = findAssetEntityByIdentity(asset.getIdentity());
-
-    assetEntity.setSymbol(asset.getSymbol());
-    assetEntity.setName(asset.getName());
-    assetEntity.setExplorer(asset.getExplorer());
-    assetEntity.setAssetType(AssetType.valueOf(asset.getAssetType()));
-
-    return assetMapper.toAsset(assetRepository.save(assetEntity));
   }
 
   @Transactional

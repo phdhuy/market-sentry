@@ -6,7 +6,6 @@ import com.phdhuy.stock_alert.domain.asset.port.outbound.AssetRepositoryPort;
 import com.phdhuy.stock_alert.shared.annotation.UseCase;
 import com.phdhuy.stock_alert.shared.payload.general.PageInfo;
 import com.phdhuy.stock_alert.shared.payload.general.ResponseDataAPI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,7 @@ public class GetAllAssetService implements GetAllAssetUseCase {
   private final AssetRepositoryPort assetRepositoryPort;
 
   @Override
-  public ResponseDataAPI getAllAsset(Pageable pageable, String type, List<String> query) {
+  public ResponseDataAPI getAllAsset(Pageable pageable, String type, String query) {
     Page<Asset> assets = assetRepositoryPort.getAllAsset(pageable, type, query);
 
     PageInfo pageInfo =

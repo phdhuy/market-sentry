@@ -58,7 +58,8 @@ public class AlertRepositoryAdapter implements AlertRepositoryPort {
   @Override
   public Page<Alert> getMyAlert(Pageable pageable, UUID userId) {
     Page<AlertEntity> alertEntities = alertRepository.getMyAlert(pageable, userId);
-    return alertEntities.map(alertMapper::toAlert);
+    return alertEntities.map(
+        alertEntity -> alertMapper.toAlert(alertEntity, alertEntity.getAssetEntity()));
   }
 
   @Override

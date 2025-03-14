@@ -45,12 +45,12 @@ public class AlertController {
   @GetMapping("/alerts")
   @PreAuthorize("hasRole('USER')")
   public ResponseEntity<ResponseDataAPI> getMyAlert(
-      @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy,
+      @RequestParam(name = "sort", defaultValue = "created_at") String sortBy,
       @RequestParam(name = "order", defaultValue = "asc") String order,
       @RequestParam(name = "page", defaultValue = "1") int page,
       @RequestParam(name = "paging", defaultValue = "30") int paging,
       @CurrentUser UserPrincipal userPrincipal) {
-    Pageable pageable = PagingUtils.makePageRequestWithSnakeCase(sortBy, order, page, paging);
+    Pageable pageable = PagingUtils.makePageRequest(sortBy, order, page, paging);
 
     Page<Alert> alerts = alertUseCase.getMyAlert(pageable, userPrincipal.getId());
 

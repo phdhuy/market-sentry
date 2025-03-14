@@ -47,7 +47,6 @@ public class PriceStockAdapter {
 
     private void fetchStockPrice(ZoneId zoneId) {
         if (!isMarketOpen(zoneId)) {
-            log.info("Market is closed, stopping WebDriver.");
             webDriverConfig.quitWebDriver();
             return;
         }

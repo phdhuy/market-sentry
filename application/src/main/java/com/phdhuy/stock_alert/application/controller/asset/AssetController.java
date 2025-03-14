@@ -8,7 +8,6 @@ import com.phdhuy.stock_alert.shared.utils.PagingUtils;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -29,13 +28,13 @@ public class AssetController {
 
   @GetMapping
   public ResponseEntity<ResponseDataAPI> getAllAsset(
-      @RequestParam(name = "sort", defaultValue = "createdAt") String sortBy,
+      @RequestParam(name = "sort", defaultValue = "created_at") String sortBy,
       @RequestParam(name = "order", defaultValue = "asc") String order,
       @RequestParam(name = "page", defaultValue = "1") int page,
       @RequestParam(name = "paging", defaultValue = "30") int paging,
       @RequestParam(name = "type", defaultValue = "CRYPTO") String type,
-      @RequestParam(name = "q", defaultValue = "") List<String> q) {
-    Pageable pageable = PagingUtils.makePageRequestWithSnakeCase(sortBy, order, page, paging);
+      @RequestParam(name = "q", defaultValue = "") String q) {
+    Pageable pageable = PagingUtils.makePageRequest(sortBy, order, page, paging);
     return ResponseEntity.ok(getAllAssetUseCase.getAllAsset(pageable, type, q));
   }
 
