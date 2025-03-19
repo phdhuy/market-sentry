@@ -9,7 +9,7 @@ public interface AssetRepositoryPort {
 
   boolean existsByIdentity(String identity);
 
-  Page<Asset> getAllAsset(Pageable pageable, String type, String query);
+  Page<Asset> getAllAsset(Pageable pageable, String type, String query, String category);
 
   Asset getDetailAsset(UUID id);
 }

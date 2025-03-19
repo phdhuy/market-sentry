@@ -10,37 +10,54 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class WebDriverConfig {
 
-  private WebDriver driver = null;
+  private WebDriver driver;
 
-  public WebDriver getWebDriver() {
+  public synchronized WebDriver getWebDriver() {
     if (driver == null) {
-      FirefoxOptions options = new FirefoxOptions();
-      options.addArguments("--headless");
-      options.addArguments("--disable-gpu");
-      options.addArguments("--no-sandbox");
-      options.addArguments("start-maximized");
-      options.addArguments("disable-infobars");
-      options.addArguments("--disable-extensions");
-      options.addArguments("--disable-application-cache");
-      options.addArguments("--disable-dev-shm-usage");
-
-      options.addPreference("browser.cache.disk.enable", false);
-      options.addPreference("browser.cache.memory.enable", false);
-      options.addPreference("browser.cache.offline.enable", false);
-      options.addPreference("network.http.use-cache", false);
-
-      driver = new FirefoxDriver(options);
+      driver = createNewDriver();
     }
     return driver;
   }
 
-  public void quitWebDriver() {
+  private WebDriver createNewDriver() {
+    FirefoxOptions options = new FirefoxOptions();
+    options.addArguments(
+        "--headless",
+        "--disable-gpu",
+        "--no-sandbox",
+        "start-maximized",
+        "disable-infobars",
+        "--disable-extensions",
+        "--disable-application-cache",
+        "--disable-dev-shm-usage");
+    options.addPreference("browser.cache.disk.enable", false);
+    options.addPreference("browser.cache.memory.enable", false);
+    options.addPreference("browser.cache.offline.enable", false);
+    options.addPreference("network.http.use-cache", false);
+
+    WebDriver newDriver = new FirefoxDriver(options);
+    log.info("Initialized new WebDriver instance.");
+    return newDriver;
+  }
+
+  public synchronized void quitWebDriver() {
     if (driver != null) {
-      log.info("Quitting web driver");
-      driver.manage().deleteAllCookies();
-      driver.quit();
-      driver = null;
+      try {
+        log.info("Quitting web driver");
+        driver.manage().deleteAllCookies();
+        driver.quit();
+      } catch (Exception e) {
+        log.error("Error while quitting WebDriver: {}", e.getMessage(), e);
+      } finally {
+        driver = null;
+      }
     }
+  }
+
+  public synchronized void resetDriver() {
+    log.info("Resetting WebDriver instance.");
+    quitWebDriver();
+    driver = createNewDriver();
   }
 
   public boolean isWebDriverAlive() {

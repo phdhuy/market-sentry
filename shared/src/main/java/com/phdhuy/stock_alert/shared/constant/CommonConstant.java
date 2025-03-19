@@ -21,7 +21,9 @@ public final class CommonConstant {
 
   public static final String PRICE_CRYPTO = "wss://ws.coincap.io/prices?assets=ALL";
 
-  public static final String PRICE_STOCK = "https://banggia.vndirect.com.vn/chung-khoan/vn30";
+  public static final String PRICE_STOCK_URL = "https://banggia.vndirect.com.vn/chung-khoan/vn30";
+
+  public static final String STOCK_VN_30_URL = "https://bgapidatafeed.vps.com.vn/listvn30";
 
   public static final String IMAGE_STOCK_VN = "https://finance.vietstock.vn/image/";
 

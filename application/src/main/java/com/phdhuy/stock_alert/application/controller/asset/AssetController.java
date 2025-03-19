@@ -33,9 +33,10 @@ public class AssetController {
       @RequestParam(name = "page", defaultValue = "1") int page,
       @RequestParam(name = "paging", defaultValue = "30") int paging,
       @RequestParam(name = "type", defaultValue = "CRYPTO") String type,
+      @RequestParam(name = "category", defaultValue = "") String category,
       @RequestParam(name = "q", defaultValue = "") String q) {
     Pageable pageable = PagingUtils.makePageRequest(sortBy, order, page, paging);
-    return ResponseEntity.ok(getAllAssetUseCase.getAllAsset(pageable, type, q));
+    return ResponseEntity.ok(getAllAssetUseCase.getAllAsset(pageable, type, q, category));
   }
 
   @GetMapping("/{assetId}")
